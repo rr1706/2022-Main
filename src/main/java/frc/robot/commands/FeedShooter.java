@@ -29,6 +29,7 @@ public class FeedShooter extends CommandBase{
     @Override
     public void initialize(){
         m_top.run();
+        m_End = false;
         //m_bottom.run();
         m_timer.reset();
         m_timer.start();
@@ -58,7 +59,6 @@ public class FeedShooter extends CommandBase{
     public void end(boolean interrupted){
         m_timer.stop();
         m_top.stop();
-        m_End = false;
         SmartDashboard.putBoolean("Shooting", false);
     }
 

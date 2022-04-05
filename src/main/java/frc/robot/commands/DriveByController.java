@@ -16,6 +16,7 @@ public class DriveByController extends CommandBase {
 
   private final SlewRateLimiter m_slewX = new SlewRateLimiter(1.45);
   private final SlewRateLimiter m_slewY = new SlewRateLimiter(1.45);
+  private final SlewRateLimiter m_slewRot = new SlewRateLimiter(3.0);
 
 
   private boolean fieldOrient = true;
@@ -43,7 +44,7 @@ public class DriveByController extends CommandBase {
         m_slewY.calculate(
           -inputTransform(m_controller.getLeftX()))
             * DriveConstants.kMaxSpeedMetersPerSecond,
-        -inputTransform(m_controller.getRightX())
+        m_slewRot.calculate(-inputTransform(m_controller.getRightX()))
             * DriveConstants.kMaxAngularSpeed,
         fieldOrient);
   }

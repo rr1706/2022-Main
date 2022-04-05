@@ -29,6 +29,8 @@ public class ForceFeed extends CommandBase{
     @Override
     public void initialize(){
         m_top.run();
+        
+        m_End = false;
         //m_bottom.run();
         m_timer.reset();
         m_timer.start();
@@ -36,8 +38,8 @@ public class ForceFeed extends CommandBase{
 
     @Override
     public void execute(){
-        boolean isRobotMovingFast = Math.abs(m_drive.getChassisSpeed().vxMetersPerSecond)>2.5 || Math.abs(m_drive.getChassisSpeed().vyMetersPerSecond)>2.5 || Math.abs(m_drive.getChassisSpeed().omegaRadiansPerSecond)>0.25;
-        boolean canShoot = true;// !isRobotMovingFast;
+        boolean isRobotRotating = Math.abs(m_drive.getChassisSpeed().omegaRadiansPerSecond)>Math.PI/3.0;
+        boolean canShoot = !isRobotRotating;
             if(canShoot){
                 m_top.run();
                 if(m_timer.get()>0.100){
@@ -58,7 +60,6 @@ public class ForceFeed extends CommandBase{
     public void end(boolean interrupted){
         m_timer.stop();
         m_top.stop();
-        m_End = false;
         SmartDashboard.putBoolean("Shooting", false);
     }
 

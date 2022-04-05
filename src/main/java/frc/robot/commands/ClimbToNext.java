@@ -37,7 +37,7 @@ public class ClimbToNext extends CommandBase {
         double currentTime = m_timer.get();
 
         if(m_climber.atSetpoint() && !m_slowDrop){
-            m_climber.changeConstraints(new Constraints(60,20));
+            m_climber.changeConstraints(new Constraints(30,15));
             m_climber.setDesiredPose(-10.0);
             m_slowDrop = true;
         }

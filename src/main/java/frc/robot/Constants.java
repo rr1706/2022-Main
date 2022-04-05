@@ -22,6 +22,8 @@ public final class Constants {
 
   public static final class GoalConstants{
     public static final Translation2d kGoalLocation = new Translation2d(8.23,4.115);
+    public static final Translation2d kHangerLocation = new Translation2d(1.67,6.70);
+
   }
 
   /**
@@ -45,8 +47,8 @@ public final class Constants {
 
     public static final double kFrontLeftOffset = -1.1634-0.269-0.346+3.141593;  //Encoder Offset in Radians
     public static final double kFrontRightOffset = -3.442 +3.1415;  //Encoder Offset in Radians
-    public static final double kBackLeftOffset = -0.0884-5.55;   //Encoder Offset in Radians
-    public static final double kBackRightOffset = -1.6194+0.542+3.14159;  //Encoder Offset in Radians
+    public static final double kBackLeftOffset = -0.0884-5.55+2.816+3.141593;   //Encoder Offset in Radians
+    public static final double kBackRightOffset = -1.6194+0.542+3.14159-7.985;  //Encoder Offset in Radians
 
     //Drive motor PID is best done on the roboRIO currently as the SparkMAX does not allow for static gain values on the PID controller, 
     //    these are necessary to have high accuracy when moving at extremely low RPMs
@@ -92,7 +94,7 @@ public final class Constants {
   public static final class ModuleConstants {
     public static final double kTranslationRampRate = 3.0;          //Units of %power/s, ie 4.0 means it takes 0.25s to reach 100% power from 0%
     private static final double kTranslationGearRatio = 8.33333333; //Overall gear ratio of the swerve module
-    private static final double kWheelDiameter = 0.0986*0.960;           //Wheel Diameter in meters, may need to be experimentally determined due to compliance of floor/tread material
+    private static final double kWheelDiameter = 0.0986*0.960*0.995;           //Wheel Diameter in meters, may need to be experimentally determined due to compliance of floor/tread material
 
     public static final double kVelocityFactor = (1.0 / kTranslationGearRatio / 60.0) * kWheelDiameter * Math.PI; //Calculates the conversion factor of RPM of the translation motor to m/s at the floor
 

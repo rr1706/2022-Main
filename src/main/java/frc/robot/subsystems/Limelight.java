@@ -79,7 +79,7 @@ public class Limelight {
     */
     public static double getDistance() {
 
-        final double tyAdj = ty()-Math.abs(tx())/5;
+        final double tyAdj = ty()-Math.abs(tx()*57.296)/12;
         final double distance = distTable.getOutput(tyAdj); 
         SmartDashboard.putNumber("Limelight ty", ty());
         //SmartDashboard.putNumber("LimelightDistance", distance);

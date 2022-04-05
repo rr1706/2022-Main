@@ -101,9 +101,9 @@ public class Turret extends PIDSubsystem {
 
    //When the Limelight has a valid solution , use the limelight tx() angle and add it to the current turret postiion to 
     //determine the updated setpoint for the turret
-/*     if (m_trackTarget && Limelight.valid()) {
+     if (m_trackTarget && Limelight.valid()) {
         angle = getMeasurement() - Limelight.tx();
-      } */
+      } 
       //if the angle setpoint is lower than the minimum allowed position, set the setpoint to the minimum allowed position
       //and set the turret to search clockwise 
       if (angle < TurretConstants.kTurretLow) {

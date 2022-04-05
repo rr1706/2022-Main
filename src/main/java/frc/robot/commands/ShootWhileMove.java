@@ -28,54 +28,52 @@ public class ShootWhileMove extends CommandBase {
     private static Point2D[] m_shotTimes = 
         new Point2D.Double[]{
             //(ty-angle,time)
-            new Point2D.Double(75,0.70),//
-            new Point2D.Double(90,0.80),//
-            new Point2D.Double(165,0.95),//
-            new Point2D.Double(240,1.15)//
+            new Point2D.Double(75,0.82),//
+            new Point2D.Double(90,0.84),//
+            new Point2D.Double(165,0.89),//
+            new Point2D.Double(240,1.05)//
         };
     private static LinearInterpolationTable m_timeTable = new LinearInterpolationTable(m_shotTimes);
 
     private static Point2D[] m_hoodPoints = 
-        new Point2D.Double[]{
-            //(ty-angle,distance)
-            new Point2D.Double(35,0.0),
-            new Point2D.Double(50,0.0),
-            new Point2D.Double(75,10.0),//
-            new Point2D.Double(90,15.5),//
-            new Point2D.Double(105,19.0),//
-            new Point2D.Double(120,23.0),//
-            new Point2D.Double(135,26.0),//
-            new Point2D.Double(150,28.0),//
-            new Point2D.Double(165,29.5),//
-            new Point2D.Double(180,33.0),//
-            new Point2D.Double(195,36.0),//
-            new Point2D.Double(210,38.0),//
-            new Point2D.Double(240,38.0)//
-        };
-    private static LinearInterpolationTable m_hoodTable = new LinearInterpolationTable(m_hoodPoints);
+    new Point2D.Double[]{
+        //(ty-angle,distance)
+        new Point2D.Double(35,0.0),
+        new Point2D.Double(50,0.0),
+        new Point2D.Double(75,10.0),//
+        new Point2D.Double(90,15.5),//
+        new Point2D.Double(105,19.0),//
+        new Point2D.Double(120,23.0),//
+        new Point2D.Double(135,25.5),//
+        new Point2D.Double(150,27.5),//
+        new Point2D.Double(165,29.5),//
+        new Point2D.Double(180,33.0),//
+        new Point2D.Double(195,36.0),//
+        new Point2D.Double(210,38.0),//
+        new Point2D.Double(240,38.0)//
+    };
+private static LinearInterpolationTable m_hoodTable = new LinearInterpolationTable(m_hoodPoints);
 
-    private static Point2D[] m_rpmPoints = 
-        new Point2D.Double[]{
+private static Point2D[] m_rpmPoints = 
+    new Point2D.Double[]{
             //(ty-angle,distance)
             new Point2D.Double(35,2350),
             new Point2D.Double(50,2350),
-            new Point2D.Double(75,2340),//
-            new Point2D.Double(90,2450),//
-            new Point2D.Double(105,2480),//
-            new Point2D.Double(120,2570),//
-            new Point2D.Double(135,2670),//
-            new Point2D.Double(150,2725),//
-            new Point2D.Double(165,2875),//
-            new Point2D.Double(180,3045
-            ),//
+            new Point2D.Double(75,2375),//
+            new Point2D.Double(90,2480),//
+            new Point2D.Double(105,2510),//
+            new Point2D.Double(120,2610),//
+            new Point2D.Double(135,2695),//
+            new Point2D.Double(150,2785),//
+            new Point2D.Double(165,2885),//
+            new Point2D.Double(180,3045),//
             new Point2D.Double(195,3180),//
             new Point2D.Double(210,3315),//
             new Point2D.Double(240,3500),//
             new Point2D.Double(280,3850),
-        };
+    };
 
-    private static LinearInterpolationTable m_rpmTable = new LinearInterpolationTable(m_rpmPoints);
-
+private static LinearInterpolationTable m_rpmTable = new LinearInterpolationTable(m_rpmPoints);
     
 
     public ShootWhileMove(Shooter shooter, Turret turret, Drivetrain drive,ShooterHood hood, boolean updatePose){
