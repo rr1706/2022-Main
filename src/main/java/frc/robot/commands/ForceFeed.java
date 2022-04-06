@@ -38,8 +38,8 @@ public class ForceFeed extends CommandBase{
 
     @Override
     public void execute(){
-        boolean isRobotRotating = Math.abs(m_drive.getChassisSpeed().omegaRadiansPerSecond)>Math.PI/3.0;
-        boolean canShoot = !isRobotRotating;
+        boolean isRobotRotating = Math.abs(m_drive.getFieldRelativeSpeed().omega) > Math.PI/3.0;
+        boolean canShoot = !isRobotRotating && Math.abs(m_drive.getFieldRelativeAccel().alpha) <= 1.00;
             if(canShoot){
                 m_top.run();
                 if(m_timer.get()>0.100){

@@ -7,7 +7,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.GlobalConstants;
 import frc.robot.Constants.GoalConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Utilities.FieldRelativeAccel;
+import frc.robot.Utilities.FieldRelativeSpeed;
 import frc.robot.Utilities.LinearInterpolationTable;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
@@ -23,57 +27,19 @@ public class ShootWhileMove extends CommandBase {
     private final ShooterHood m_hood;
     private final boolean m_updatePose;
     private final Timer m_timer = new Timer();
-    private double m_shotTime = 0.0;
 
     private static Point2D[] m_shotTimes = 
         new Point2D.Double[]{
             //(ty-angle,time)
-            new Point2D.Double(75,0.82),//
-            new Point2D.Double(90,0.84),//
-            new Point2D.Double(165,0.89),//
+            new Point2D.Double(75,0.85),//
+            new Point2D.Double(90,0.85),//
+            new Point2D.Double(165,0.85),//
             new Point2D.Double(240,1.05)//
         };
     private static LinearInterpolationTable m_timeTable = new LinearInterpolationTable(m_shotTimes);
 
-    private static Point2D[] m_hoodPoints = 
-    new Point2D.Double[]{
-        //(ty-angle,distance)
-        new Point2D.Double(35,0.0),
-        new Point2D.Double(50,0.0),
-        new Point2D.Double(75,10.0),//
-        new Point2D.Double(90,15.5),//
-        new Point2D.Double(105,19.0),//
-        new Point2D.Double(120,23.0),//
-        new Point2D.Double(135,25.5),//
-        new Point2D.Double(150,27.5),//
-        new Point2D.Double(165,29.5),//
-        new Point2D.Double(180,33.0),//
-        new Point2D.Double(195,36.0),//
-        new Point2D.Double(210,38.0),//
-        new Point2D.Double(240,38.0)//
-    };
-private static LinearInterpolationTable m_hoodTable = new LinearInterpolationTable(m_hoodPoints);
-
-private static Point2D[] m_rpmPoints = 
-    new Point2D.Double[]{
-            //(ty-angle,distance)
-            new Point2D.Double(35,2350),
-            new Point2D.Double(50,2350),
-            new Point2D.Double(75,2375),//
-            new Point2D.Double(90,2480),//
-            new Point2D.Double(105,2510),//
-            new Point2D.Double(120,2610),//
-            new Point2D.Double(135,2695),//
-            new Point2D.Double(150,2785),//
-            new Point2D.Double(165,2885),//
-            new Point2D.Double(180,3045),//
-            new Point2D.Double(195,3180),//
-            new Point2D.Double(210,3315),//
-            new Point2D.Double(240,3500),//
-            new Point2D.Double(280,3850),
-    };
-
-private static LinearInterpolationTable m_rpmTable = new LinearInterpolationTable(m_rpmPoints);
+    private static LinearInterpolationTable m_hoodTable = ShooterConstants.khoodTable;
+    private static LinearInterpolationTable m_rpmTable = ShooterConstants.krpmTable;
     
 
     public ShootWhileMove(Shooter shooter, Turret turret, Drivetrain drive,ShooterHood hood, boolean updatePose){
@@ -94,24 +60,23 @@ private static LinearInterpolationTable m_rpmTable = new LinearInterpolationTabl
         SmartDashboard.putNumber("SetHoodAdjust", 0.0);
         SmartDashboard.putNumber("SetShotAdjust", 0);
         SmartDashboard.putBoolean("Adjust Shot?", false);
-        m_shotTime=2.0;
     }
 
     @Override
     public void execute(){
-        double currentTime = m_timer.get();
-
+        double currentTime = m_timer.get();        
         SmartDashboard.putBoolean("Shooter Running", true);
-        double goalVelX = -m_drive.getFieldRelativeSpeeds().vxMetersPerSecond;
-        double goalVelY = -m_drive.getFieldRelativeSpeeds().vyMetersPerSecond;
+
+        FieldRelativeSpeed robotVel = m_drive.getFieldRelativeSpeed();
+        FieldRelativeAccel robotAccel = m_drive.getFieldRelativeAccel();
 
         Translation2d robotToGoal = GoalConstants.kGoalLocation.minus(m_drive.getPose().getTranslation());
         double dist = robotToGoal.getDistance(new Translation2d())*39.37;
 
         double fixedShotTime = m_timeTable.getOutput(dist);
 
-        double virtualGoalX = GoalConstants.kGoalLocation.getX()+goalVelX*fixedShotTime;
-        double virtualGoalY = GoalConstants.kGoalLocation.getY()+goalVelY*fixedShotTime;
+        double virtualGoalX = GoalConstants.kGoalLocation.getX()-fixedShotTime*(robotVel.vx+robotAccel.ax*ShooterConstants.kAccelCompFactor);
+        double virtualGoalY = GoalConstants.kGoalLocation.getY()-fixedShotTime*(robotVel.vy+robotAccel.ay*ShooterConstants.kAccelCompFactor);
 
         SmartDashboard.putNumber("Goal X", virtualGoalX);
         SmartDashboard.putNumber("Goal Y", virtualGoalY);
@@ -123,7 +88,7 @@ private static LinearInterpolationTable m_rpmTable = new LinearInterpolationTabl
         double newDist = toMovingGoal.getDistance(new Translation2d())*39.37;
 
             if(SmartDashboard.getBoolean("Adjust Shot?", false)){
-                m_shooter.run(m_rpmTable.getOutput(newDist)+SmartDashboard.getNumber("SetShotAdjust", 0));
+                m_shooter.run(ShooterConstants.krpmTable.getOutput(newDist)+SmartDashboard.getNumber("SetShotAdjust", 0));
                 m_hood.run(m_hoodTable.getOutput(newDist)+SmartDashboard.getNumber("SetHoodAdjust", 0));
             } 
             else{
@@ -165,19 +130,6 @@ private static LinearInterpolationTable m_rpmTable = new LinearInterpolationTabl
         double rY = goal.getY()-dL*Math.sin(tG);
     
         return new Pose2d(rX,rY, new Rotation2d(-tR));
-    }
-    
-    private boolean robotMovingFast(ChassisSpeeds input){
-        double speed = Math.sqrt(Math.pow(input.vxMetersPerSecond,2)+Math.pow(input.vyMetersPerSecond, 2));
-        double angleSpeed = Math.abs(input.omegaRadiansPerSecond);
-    
-        if(speed > 1.000 || angleSpeed > 0.050){
-            return true;
-        }
-        else{
-            return false;
-        }
-    
     }
 
 }

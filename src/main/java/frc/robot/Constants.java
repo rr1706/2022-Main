@@ -3,6 +3,9 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import frc.robot.Utilities.LinearInterpolationTable;
+
+import java.awt.geom.Point2D;
 
   /**
    * Static method containing all constant values for the robot in one location
@@ -118,6 +121,7 @@ public final class Constants {
     public static final double kVoltCompensation = 12.6;        //Sets a voltage compensation value ideally 12.6V
     public static final int PCHID = 20;
     public static final int PDHID = 24;
+    public static final double kLoopTime = 0.020;
   }
   /**
    * Static method containing all Vision/Limelight constants 
@@ -176,6 +180,48 @@ public final class Constants {
     public static final double[] kPID = { 0.00005, 0.0003, 0 };         //Defines PID values for the shooter 0.00045
     public static final double kShooterFF = 0.018;            //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
     public static final double kStaticGain = 0.0001635;
+    public static final double kAccelCompFactor = 0.100; //in units of seconds
+
+
+    private static final Point2D[] khoodPoints = 
+        new Point2D.Double[]{
+            //(ty-angle,distance)
+            new Point2D.Double(35,0.0),
+            new Point2D.Double(50,0.0),
+            new Point2D.Double(75,10.0),//
+            new Point2D.Double(90,15.5),//
+            new Point2D.Double(105,19.0),//
+            new Point2D.Double(120,23.0),//
+            new Point2D.Double(135,25.5),//
+            new Point2D.Double(150,27.5),//
+            new Point2D.Double(165,29.5),//
+            new Point2D.Double(180,33.0),//
+            new Point2D.Double(195,36.0),//
+            new Point2D.Double(210,38.0),//
+            new Point2D.Double(240,38.0)//
+        };
+    public static final LinearInterpolationTable khoodTable = new LinearInterpolationTable(khoodPoints);
+
+    private static final Point2D[] krpmPoints = 
+        new Point2D.Double[]{
+            //(ty-angle,distance)
+            new Point2D.Double(35,2350),
+            new Point2D.Double(50,2350),
+            new Point2D.Double(75,2375),//
+            new Point2D.Double(90,2480),//
+            new Point2D.Double(105,2510),//
+            new Point2D.Double(120,2610),//
+            new Point2D.Double(135,2695),//
+            new Point2D.Double(150,2785),//
+            new Point2D.Double(165,2885),//
+            new Point2D.Double(180,3045),//
+            new Point2D.Double(195,3180),//
+            new Point2D.Double(210,3315),//
+            new Point2D.Double(240,3500),//
+            new Point2D.Double(280,3850),
+        };
+
+    public static final LinearInterpolationTable krpmTable = new LinearInterpolationTable(krpmPoints);
   }
   
     /**

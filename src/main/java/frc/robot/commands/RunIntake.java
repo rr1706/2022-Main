@@ -26,7 +26,7 @@ public class RunIntake extends CommandBase {
     public void execute(){
         SmartDashboard.putBoolean(m_intake.getID() + " Running", true);
         final double currentTime = m_timer.get();
-        if(m_intake.getCurrent()>15.0 && currentTime>0.250 && !m_ballDetected)
+        if(m_intake.getCurrent()>12.5 && currentTime>0.250 && !m_ballDetected)
         {
             m_ballTime = currentTime;
             m_ballDetected = true;

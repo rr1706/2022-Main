@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.Timer;
 
 import frc.robot.Constants.*;
+import frc.robot.Utilities.FieldRelativeAccel;
+import frc.robot.Utilities.FieldRelativeSpeed;
 
   /**
    * Implements a swerve Drivetrain Subsystem for the Robot
@@ -34,6 +36,10 @@ import frc.robot.Constants.*;
   private double lastRotTime = 0.0;     //Double to store the time of the last rotation command
   private double timeSinceDrive = 0.0;  //Double to store the time since last translation command
   private double lastDriveTime = 0.0;   //Double to store the time of the last translation command
+
+  private FieldRelativeSpeed m_fieldRelVel = new FieldRelativeSpeed();
+  private FieldRelativeSpeed m_lastFieldRelVel = new FieldRelativeSpeed();
+  private FieldRelativeAccel m_fieldRelAccel = new FieldRelativeAccel();;
 
   private final Timer keepAngleTimer = new Timer(); //Creates timer used in the perform keep angle function
 
@@ -102,6 +108,13 @@ import frc.robot.Constants.*;
   }
   @Override
   public void periodic(){
+      m_fieldRelVel = new FieldRelativeSpeed(getChassisSpeed(), getGyro());
+      m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, GlobalConstants.kLoopTime);
+      m_lastFieldRelVel = m_fieldRelVel;
+
+      SmartDashboard.putNumber("Accel X", m_fieldRelAccel.ax);
+      SmartDashboard.putNumber("Accel Y", m_fieldRelAccel.ay);
+      SmartDashboard.putNumber("Alpha", m_fieldRelAccel.alpha);
 
         //SmartDashboard.putNumber("Front Left Encoder", m_frontLeft.getTurnEncoder());
         //SmartDashboard.putNumber("Front Right Encoder", m_frontRight.getTurnEncoder());
@@ -150,6 +163,14 @@ import frc.robot.Constants.*;
    */  
   public Rotation2d getGyro() {
     return ahrs.getRotation2d();
+  }
+
+  public FieldRelativeSpeed getFieldRelativeSpeed(){
+    return m_fieldRelVel;
+  }
+
+  public FieldRelativeAccel getFieldRelativeAccel(){
+    return m_fieldRelAccel;
   }
 
     /**
@@ -204,13 +225,6 @@ import frc.robot.Constants.*;
   public ChassisSpeeds getChassisSpeed(){
     return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
     m_backRight.getState());
-  }
-
-  public ChassisSpeeds getFieldRelativeSpeeds(){    
-    return new ChassisSpeeds(
-        getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getCos() - getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getSin(),
-        getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getCos() + getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getSin(),
-        getChassisSpeed().omegaRadiansPerSecond);
   }
 
   /**
