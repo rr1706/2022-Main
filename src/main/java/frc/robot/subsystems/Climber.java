@@ -84,7 +84,7 @@ public class Climber extends SubsystemBase {
     @Override
     public void periodic() {
         double pose = m_encoder.getPosition();
-        double speed = m_encoder.getVelocity();
+        //double speed = m_encoder.getVelocity();
         //SmartDashboard.putBoolean("Running Climber", false);
         //m_pose = SmartDashboard.getNumber("Set Climber Pose", 0.0);
         SmartDashboard.putNumber("Climber Pose", pose);

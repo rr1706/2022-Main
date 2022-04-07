@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -26,15 +27,14 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.Utilities.JoystickAnalogButton;
 import frc.robot.Utilities.JoystickAnalogButton.Side;
 import frc.robot.commands.ClimbFromFloor;
-import frc.robot.commands.ClimbToNext;
 import frc.robot.commands.FinalClimb;
-import frc.robot.commands.ForceFeed;
 import frc.robot.commands.Extend;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.FaceTurret;
 import frc.robot.commands.FeedShooter;
 import frc.robot.commands.IndexElevator;
 import frc.robot.commands.InitiateClimbMode;
+import frc.robot.commands.MoveFeed;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunShooter;
 import frc.robot.commands.ShootAtHanger;
@@ -48,6 +48,7 @@ import frc.robot.commands.Autos.SixBall;
 import frc.robot.commands.Autos.TwoBallOne;
 import frc.robot.commands.Autos.TwoBallTwo;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve.Drivetrain;
@@ -83,6 +84,8 @@ public class RobotContainer {
 
   private final ShooterHood m_hood = new ShooterHood();
 
+  private final ColorSensor m_colorSensor = new ColorSensor();
+
   private final IndexElevator m_indexElevator = new IndexElevator(m_highElevator, m_lowElevator);
   private final ZeroClimb m_ZeroClimb = new ZeroClimb(m_climber);
   private final ZeroHood m_ZeroHood = new ZeroHood(m_hood);
@@ -97,16 +100,15 @@ public class RobotContainer {
     m_rightIntake, m_highElevator, m_lowElevator, m_robotDrive, m_driverController, m_climber);
 
   private final ClimbFromFloor m_firstClimb = new ClimbFromFloor(m_climber);
-  private final ClimbToNext m_nextClimb = new ClimbToNext(m_climber);
   private final FinalClimb m_finalClimb = new FinalClimb(m_climber);
   private final Extend m_extend= new Extend(m_climber);
 
   private final RunShooter m_runShooter = new RunShooter(m_shooter, m_turret, m_robotDrive, m_hood, true);
-  private final ShootWhileMove m_moveShoot = new ShootWhileMove(m_shooter, m_turret, m_robotDrive, m_hood, true);
+  private final ShootWhileMove m_moveShoot = new ShootWhileMove(m_shooter, m_turret, m_robotDrive, m_hood, true, m_colorSensor);
   private final ShootAtHanger m_aimHanger = new ShootAtHanger(m_shooter, m_turret, m_robotDrive, m_hood);
 
   private final FeedShooter m_feedShooter = new FeedShooter(m_turret, m_highElevator, m_lowElevator, m_robotDrive);
-  private final ForceFeed m_forceFeed = new ForceFeed(m_turret, m_highElevator, m_lowElevator, m_robotDrive);
+  private final MoveFeed m_moveFeed = new MoveFeed(m_turret, m_highElevator, m_lowElevator, m_robotDrive, m_shooter, m_hood);
 
   private final DriveByController m_drive = new DriveByController(m_robotDrive, m_driverController);
 
@@ -165,14 +167,14 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(m_moveShoot);
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(()->m_robotDrive.resetOdometry(new Pose2d(3.89,5.41, m_robotDrive.getGyro().times(-1.0))));
 
-    new JoystickAnalogButton(m_operatorController, Side.kRight).whenPressed(m_forceFeed).whenReleased(()->m_forceFeed.stop());
+    new JoystickAnalogButton(m_operatorController, Side.kRight).whenPressed(m_moveFeed).whenReleased(()->m_moveFeed.stop());
 
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(m_unjamRight);
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(m_unjamLeft);
 
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(m_feedShooter).whenReleased(()->m_feedShooter.stop());
-    new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(m_forceFeed).whenReleased(()->m_forceFeed.stop());
+    new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(m_moveFeed).whenReleased(()->m_moveFeed.stop());
 
     new POVButton(m_operatorController, 0).whenPressed(m_ZeroHood);
     new POVButton(m_operatorController, 90).whenPressed(m_moveShoot);

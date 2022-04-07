@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.GlobalConstants;
 import frc.robot.Constants.GoalConstants;
@@ -13,6 +14,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.Utilities.FieldRelativeAccel;
 import frc.robot.Utilities.FieldRelativeSpeed;
 import frc.robot.Utilities.LinearInterpolationTable;
+import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterHood;
@@ -26,6 +28,7 @@ public class ShootWhileMove extends CommandBase {
     private final Drivetrain m_drive;
     private final ShooterHood m_hood;
     private final boolean m_updatePose;
+    private final ColorSensor m_color;
     private final Timer m_timer = new Timer();
 
     private static Point2D[] m_shotTimes = 
@@ -42,12 +45,13 @@ public class ShootWhileMove extends CommandBase {
     private static LinearInterpolationTable m_rpmTable = ShooterConstants.krpmTable;
     
 
-    public ShootWhileMove(Shooter shooter, Turret turret, Drivetrain drive,ShooterHood hood, boolean updatePose){
+    public ShootWhileMove(Shooter shooter, Turret turret, Drivetrain drive,ShooterHood hood, boolean updatePose, ColorSensor color){
         m_shooter = shooter;
         m_turret = turret;
         m_drive = drive;
         m_hood = hood;
         m_updatePose = updatePose;
+        m_color = color;
         addRequirements(shooter, turret, hood);
     }
 
@@ -64,6 +68,9 @@ public class ShootWhileMove extends CommandBase {
 
     @Override
     public void execute(){
+
+        boolean wrongColor = !m_color.isAllianceBall();
+
         double currentTime = m_timer.get();        
         SmartDashboard.putBoolean("Shooter Running", true);
 
@@ -90,12 +97,16 @@ public class ShootWhileMove extends CommandBase {
             if(SmartDashboard.getBoolean("Adjust Shot?", false)){
                 m_shooter.run(ShooterConstants.krpmTable.getOutput(newDist)+SmartDashboard.getNumber("SetShotAdjust", 0));
                 m_hood.run(m_hoodTable.getOutput(newDist)+SmartDashboard.getNumber("SetHoodAdjust", 0));
+            }
+            else if(wrongColor){
+                m_shooter.run(1500);
+                m_hood.run(1.0);
             } 
             else{
                 m_shooter.run(m_rpmTable.getOutput(newDist));
                 m_hood.run(m_hoodTable.getOutput(newDist));
             }
-
+            
         m_turret.aimAtGoal(m_drive.getPose(), movingGoalLocation);
 
         if(currentTime > 0.250 && Limelight.valid()){// && !robotMovingFast(m_drive.getChassisSpeed())){

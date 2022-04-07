@@ -8,6 +8,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.CurrentLimit;
@@ -38,7 +40,7 @@ public class Turret extends PIDSubsystem {
     }
 
     public double getMeasurement(){
-        double angle = MathUtils.toUnitCircAngle(-1.0*m_encoder.get())+0.1544-0.0244;
+        double angle = MathUtils.toUnitCircAngle(-1.0*m_encoder.get())+0.1544;
        // SmartDashboard.putNumber("Turret Encoder", angle);
         return angle;
     }
