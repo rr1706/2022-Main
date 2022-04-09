@@ -1,10 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterHood;
 import frc.robot.subsystems.Turret;
@@ -17,18 +19,22 @@ public class MoveFeed extends CommandBase{
     private final Drivetrain m_drive;
     private final Shooter m_shooter;
     private final ShooterHood m_hood;
+    private final Rumble m_driverRumble;
     private final Timer m_timer = new Timer();
     private boolean m_End = false;
     private double m_lastFeedTime = 0.0;
 
+    private int m_temp = 0;
+
     public MoveFeed(Turret turret, Elevator top, Elevator bottom, Drivetrain
-     drive, Shooter shooter, ShooterHood hood){
+     drive, Shooter shooter, ShooterHood hood, XboxController controller){
         m_turret = turret;
         m_top = top;
         m_bottom = bottom;
         m_drive = drive;
         m_shooter = shooter;
         m_hood = hood;
+        m_driverRumble = new Rumble(controller);
         addRequirements(top,bottom);
     }
 
@@ -62,24 +68,36 @@ public class MoveFeed extends CommandBase{
                 if(m_top.getSensor()&&m_bottom.getSensor()){
                     m_bottom.stop();
                     m_top.stop();
-                    m_timer.reset();
                     SmartDashboard.putBoolean("top index", true);
                     SmartDashboard.putBoolean("bottom index", true);
+                    if (m_temp != 3) {
+                        m_temp = 3;
+                        m_driverRumble.setRumble(1, 0.5, 0.1);
+                    }
                 }else if(!m_bottom.getSensor()&& !m_top.getSensor()){
                     m_bottom.run();
                     m_top.run();
                     SmartDashboard.putBoolean("top index", false);
                     SmartDashboard.putBoolean("bottom index", false);
+                    m_temp = 0;
                 }else if(m_top.getSensor()&&!m_bottom.getSensor()){
                     m_bottom.run();
                     m_top.stop();
                     SmartDashboard.putBoolean("top index", true);
                     SmartDashboard.putBoolean("bottom index", false);
+                    if (m_temp != 2) {
+                        m_temp = 2;
+                        m_driverRumble.setRumble(2, 0.5, 0.1);
+                    }
                 }else if(m_bottom.getSensor()&&!m_top.getSensor()){
                     m_bottom.run();
                     m_top.run();
                     SmartDashboard.putBoolean("top index", false);
                     SmartDashboard.putBoolean("bottom index", true);
+                    if (m_temp != 3) {
+                        m_temp = 1;
+                        m_driverRumble.setRumble(2, 0.5, 0.1);            
+                    }
                 }
             }
             
