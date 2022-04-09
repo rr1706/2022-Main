@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -86,7 +87,7 @@ public class RobotContainer {
 
   private final ColorSensor m_colorSensor = new ColorSensor();
 
-  private final IndexElevator m_indexElevator = new IndexElevator(m_highElevator, m_lowElevator);
+  private final IndexElevator m_indexElevator = new IndexElevator(m_highElevator, m_lowElevator, m_driverController, m_operatorController);
   private final ZeroClimb m_ZeroClimb = new ZeroClimb(m_climber);
   private final ZeroHood m_ZeroHood = new ZeroHood(m_hood);
 
@@ -114,10 +115,10 @@ public class RobotContainer {
 
   private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive); // Create FaceTurret Command
 
-  private final Command autoFiveBall = new FiveBall(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber);
-  private final Command autoSixBall = new SixBall(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber);
-  private final Command autoTwoBall = new TwoBallOne(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber);
-  private final Command autoHangar = new TwoBallTwo(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber);
+  private final Command autoFiveBall = new FiveBall(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber, m_driverController, m_operatorController);
+  private final Command autoSixBall = new SixBall(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber, m_driverController, m_operatorController);
+  private final Command autoTwoBall = new TwoBallOne(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber, m_driverController, m_operatorController);
+  private final Command autoHangar = new TwoBallTwo(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber, m_driverController, m_operatorController);
   //private final Command autoTwoBallTwo = new TwoBallTwo(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber);
   //private final Command autoOneBall = new OneBall(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber);
   //private final Command emergencyNoBall = new EMERGENCYNOBALL(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator, m_highElevator, m_turret, m_hood, m_shooter, m_climber);

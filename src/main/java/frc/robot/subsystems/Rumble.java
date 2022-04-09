@@ -10,7 +10,6 @@ public class Rumble extends SubsystemBase {
     private final Timer m_timer = new Timer();
     
     private double m_time = 0.0;
-    private int m_temp = 0;
     private int m_side = 0;
     private double m_strength = 0.0;
     private String m_type = "Continuous";

@@ -159,6 +159,7 @@ public final class Constants {
     public static final double kStaticGain = 0.025;             //Limits Integral term so as to not wind up values when making larger moves
     public static final double kTurretLow = 0.26;               //Minimum angle in radians allowed (defines the turret deadzone)
     public static final double kTurretHigh = 6.02;              //Maximum angle in radians allowed (defines the turret deadzone)
+    public static final double kTurretCenter = (kTurretHigh - kTurretLow) / 2.0;
   }
 
   public static final class ClimberConstants {

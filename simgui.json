@@ -3,11 +3,13 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Climber": "Subsystem",
+      "/LiveWindow/ColorSensor": "Subsystem",
       "/LiveWindow/Drivetrain": "Subsystem",
       "/LiveWindow/Elevator": "Subsystem",
       "/LiveWindow/Intake": "Subsystem",
       "/LiveWindow/Shooter": "Subsystem",
       "/LiveWindow/ShooterHood": "Subsystem",
+      "/LiveWindow/Turret": "Subsystem",
       "/LiveWindow/Turret/PID Controller": "PIDController",
       "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[10]": "Digital Input",

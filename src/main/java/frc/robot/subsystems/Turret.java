@@ -167,7 +167,7 @@ public class Turret extends PIDSubsystem {
     }
 
     public boolean atSetpoint(){
-        return m_controller.atSetpoint();
+      return m_controller.atSetpoint();
     }
 
     public boolean atDesiredAngle(){
@@ -178,10 +178,21 @@ public class Turret extends PIDSubsystem {
       return (m_desiredAngle >= TurretConstants.kTurretHigh-0.02 || m_desiredAngle <= TurretConstants.kTurretLow+0.02);
     }
 
+    /**
+     * @return The distance between the desired turret angle and the end of the deadzone
+     */
+    public double distanceFromDeadzoneEnd(){
+      if (m_desiredAngle <= TurretConstants.kTurretHigh-0.02) {
+        return (TurretConstants.kTurretHigh - m_desiredAngle) / TurretConstants.kTurretCenter;
+      } else if (m_desiredAngle >= TurretConstants.kTurretLow+0.02) {
+        return (m_desiredAngle - TurretConstants.kTurretLow) / TurretConstants.kTurretCenter;
+      } else {
+        return 0.0;
+      }
+    }
+
     public void climbMode(){
         setSetpoint(Math.PI);
     }
 
 }
-
-

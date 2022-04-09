@@ -1,5 +1,6 @@
 package frc.robot.commands.Autos;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -25,7 +26,7 @@ public class FiveBall extends SequentialCommandGroup{
  
     private final Drivetrain m_drive;
 
-    public FiveBall(Drivetrain drivetrain, Intake leftIntake, Intake rightIntake, Elevator bottom, Elevator top, Turret turret, ShooterHood hood, Shooter shooter, Climber climb){
+    public FiveBall(Drivetrain drivetrain, Intake leftIntake, Intake rightIntake, Elevator bottom, Elevator top, Turret turret, ShooterHood hood, Shooter shooter, Climber climb, XboxController driverController, XboxController operatorController){
 
         m_drive = drivetrain;
 
@@ -45,12 +46,12 @@ public class FiveBall extends SequentialCommandGroup{
             new ParallelCommandGroup(
                 new RunShooter(shooter, turret, drivetrain, hood, false),
                 new SequentialCommandGroup(
-                    fiveBallUno.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
+                    fiveBallUno.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom, driverController, operatorController))),
                     m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop()))), 
-                    fiveBallDos.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
+                    fiveBallDos.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom, driverController, operatorController))),
                     m_autoFeed2.raceWith(new WaitCommand(1.5).andThen(new InstantCommand(()->m_autoFeed2.stop()))),
-                    fiveBallTres.andThen(new WaitCommand(1.0)).raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
-                    fiveBallQuatro.raceWith(new IndexElevator(top, bottom)),
+                    fiveBallTres.andThen(new WaitCommand(1.0)).raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom, driverController, operatorController))),
+                    fiveBallQuatro.raceWith(new IndexElevator(top, bottom, driverController, operatorController)),
                     m_autoFeed3.raceWith(new WaitCommand(5.0).andThen(new InstantCommand(()->m_autoFeed3.stop())))
         )));
     }
