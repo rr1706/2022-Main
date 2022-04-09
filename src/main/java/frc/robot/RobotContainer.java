@@ -104,7 +104,7 @@ public class RobotContainer {
   private final FinalClimb m_finalClimb = new FinalClimb(m_climber);
   private final Extend m_extend= new Extend(m_climber);
 
-  private final RunShooter m_runShooter = new RunShooter(m_shooter, m_turret, m_robotDrive, m_hood, true);
+  private final RunShooter m_runShooter = new RunShooter(m_shooter, m_turret, m_robotDrive, m_hood, m_operatorController, true);
   private final ShootWhileMove m_moveShoot = new ShootWhileMove(m_shooter, m_turret, m_robotDrive, m_hood, true, m_colorSensor);
   private final ShootAtHanger m_aimHanger = new ShootAtHanger(m_shooter, m_turret, m_robotDrive, m_hood);
 

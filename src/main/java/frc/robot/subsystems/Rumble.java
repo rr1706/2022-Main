@@ -27,6 +27,53 @@ public class Rumble extends SubsystemBase {
      * Set the rumble in the controller
      * @param side 0 = Both - 1 = Left - 2 = Right
      * @param strength Strength of the rumble
+     */
+    public void setRumble(int side, double strength) {
+        m_strength = strength;
+        m_type = "Continous";
+        m_side = side;
+        m_rumbling = 1;
+        m_timer.reset();
+        m_timer.start();
+
+        if (m_side == 1) {
+            m_controller.setRumble(RumbleType.kLeftRumble, strength);
+        } else if (m_side == 2) {
+            m_controller.setRumble(RumbleType.kRightRumble, strength);
+        } else if (m_side == 0) {
+            m_controller.setRumble(RumbleType.kLeftRumble, strength);
+            m_controller.setRumble(RumbleType.kRightRumble, strength);
+        }
+    }
+
+    /**
+     * Set the rumble in the controller
+     * @param pattern Pulse, Tap, Flutter, Continuous
+     * @param side 0 = Both - 1 = Left - 2 = Right
+     * @param strength Strength of the rumble
+     */
+    public void setRumble(String pattern, int side, double strength) {
+        m_strength = strength;
+        m_type = pattern;
+        m_side = side;
+        m_rumbling = 1;
+        m_timer.reset();
+        m_timer.start();
+        
+        if (m_side == 1) {
+            m_controller.setRumble(RumbleType.kLeftRumble, strength);
+        } else if (m_side == 2) {
+            m_controller.setRumble(RumbleType.kRightRumble, strength);
+        } else if (m_side == 0) {
+            m_controller.setRumble(RumbleType.kLeftRumble, strength);
+            m_controller.setRumble(RumbleType.kRightRumble, strength);
+        }
+    }
+
+    /**
+     * Set the rumble in the controller
+     * @param side 0 = Both - 1 = Left - 2 = Right
+     * @param strength Strength of the rumble
      * @param time Length of time to rumble
      */
     public void setRumble(int side, double strength, double time) {

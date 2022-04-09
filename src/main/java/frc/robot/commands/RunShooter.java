@@ -5,12 +5,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.GoalConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Utilities.LinearInterpolationTable;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterHood;
 import frc.robot.subsystems.Turret;
@@ -22,6 +24,7 @@ public class RunShooter extends CommandBase {
     private final Turret m_turret;
     private final Drivetrain m_drive;
     private final ShooterHood m_hood;
+    private final Rumble m_rumble;
     private final boolean m_updatePose;
     private final Timer m_timer = new Timer();
 
@@ -30,11 +33,12 @@ public class RunShooter extends CommandBase {
 
     
 
-    public RunShooter(Shooter shooter, Turret turret, Drivetrain drive,ShooterHood hood, boolean updatePose){
+    public RunShooter(Shooter shooter, Turret turret, Drivetrain drive, ShooterHood hood, XboxController operatorController, boolean updatePose){
         m_shooter = shooter;
         m_turret = turret;
         m_drive = drive;
         m_hood = hood;
+        m_rumble = new Rumble(operatorController);
         m_updatePose = updatePose;
         addRequirements(shooter, turret, hood);
     }
@@ -95,6 +99,10 @@ public class RunShooter extends CommandBase {
                 m_drive.setPose(pose);
             }
     
+        }
+
+        if (m_turret.distanceFromDeadzoneEnd() < 0.35) {
+            m_rumble.setRumble("Tap", 1, 1 - m_turret.distanceFromDeadzoneEnd() - 0.5);
         }
     }
 

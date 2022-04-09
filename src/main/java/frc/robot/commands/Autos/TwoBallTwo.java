@@ -37,7 +37,7 @@ public class TwoBallTwo extends SequentialCommandGroup {
             new InstantCommand(()->drivetrain.resetOdometry(twoBallPath.getInitialPose())),
             new InstantCommand(()->climb.extend()),
             new ParallelRaceGroup(
-                new RunShooter(shooter, turret, drivetrain, hood, false),
+                new RunShooter(shooter, turret, drivetrain, hood, operatorController, false),
                 new SequentialCommandGroup(
                     twoBallPath.raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom, driverController, operatorController))),
                     m_autoFeed.raceWith(new WaitCommand(1.5).andThen(new InstantCommand(()->m_autoFeed.stop()))))),

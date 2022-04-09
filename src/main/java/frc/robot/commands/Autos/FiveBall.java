@@ -44,7 +44,7 @@ public class FiveBall extends SequentialCommandGroup{
             new InstantCommand(()->drivetrain.resetOdometry(fiveBallUno.getInitialPose())),
             new InstantCommand(()->climb.extend()),
             new ParallelCommandGroup(
-                new RunShooter(shooter, turret, drivetrain, hood, false),
+                new RunShooter(shooter, turret, drivetrain, hood, operatorController, false),
                 new SequentialCommandGroup(
                     fiveBallUno.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom, driverController, operatorController))),
                     m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop()))), 
