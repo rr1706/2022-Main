@@ -3,6 +3,7 @@ package frc.robot.commands.Autos;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.HoodConstants;
@@ -43,14 +44,14 @@ public class Defense1n1 extends SequentialCommandGroup{
             
             new InstantCommand(()->drivetrain.resetOdometry(unounoUno.getInitialPose())),
             new InstantCommand(()->climb.extend()),
-            new ParallelCommandGroup(
+            new ParallelRaceGroup(
                 runShooter,
                 new SequentialCommandGroup(
                     m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop())),
                     unounoUno.raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom)))
                 ),
 
-            new ParallelCommandGroup(
+            new ParallelRaceGroup(
                 hangShoot,
                 new SequentialCommandGroup(
                     unounoDos,

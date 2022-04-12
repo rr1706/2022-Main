@@ -3,11 +3,13 @@ package frc.robot.commands.Autos;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Utilities.AutoFromPathPlanner;
 import frc.robot.commands.FeedShooter;
+import frc.robot.commands.ForceFeed;
 import frc.robot.commands.IndexElevator;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunShooter;
@@ -40,6 +42,7 @@ public class Defense5n1 extends SequentialCommandGroup{
         final FeedShooter m_autoFeed = new FeedShooter(turret, top, bottom, drivetrain);
         final FeedShooter m_autoFeed2 = new FeedShooter(turret, top, bottom, drivetrain);
         final FeedShooter m_autoFeed3 = new FeedShooter(turret, top, bottom, drivetrain);
+        final ForceFeed m_moveFeed = new ForceFeed(turret, top, bottom, drivetrain);
 
         RunShooter runShooter = new RunShooter(shooter, turret, drivetrain, hood, false);
         ShootWhileMove shootMove = new ShootWhileMove(shooter, turret, drivetrain, hood, false);
@@ -49,28 +52,28 @@ public class Defense5n1 extends SequentialCommandGroup{
             
             new InstantCommand(()->drivetrain.resetOdometry(fiveoneUno.getInitialPose())),
             new InstantCommand(()->climb.extend()),
-            new ParallelCommandGroup(
+            new ParallelRaceGroup(
                 runShooter,
                 new SequentialCommandGroup(
                     fiveoneUno.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
-                    m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop()).andThen(()->runShooter.end(false))))    
+                    m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop())))    
                 )
             ),
-            new ParallelCommandGroup(
-                new ShootAtHanger(shooter, turret, drivetrain, hood),
+            new ParallelRaceGroup(
+                hangShoot,
                 new SequentialCommandGroup(
                     fiveoneDos.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
                     fiveoneTres,
-                    m_autoFeed2.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed2.stop()).andThen(()->hangShoot.end(false))))
+                    m_autoFeed2.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed2.stop())))
                 
             )),
 
-            new ParallelCommandGroup(
+            new ParallelRaceGroup(
                 shootMove,
                 new SequentialCommandGroup(
                     fiveoneQuatro.raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom))),
                     new RunIntake(leftIntake).raceWith(new WaitCommand(5.0)),
-                    fiveoneCinco.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom)).alongWith(m_autoFeed3)),
+                    fiveoneCinco.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom)).alongWith(m_moveFeed)),
                     m_autoFeed3.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed3.stop()))) 
                 
             )
