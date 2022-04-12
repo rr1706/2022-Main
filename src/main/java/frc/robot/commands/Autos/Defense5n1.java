@@ -41,7 +41,7 @@ public class Defense5n1 extends SequentialCommandGroup{
         final FeedShooter m_autoFeed2 = new FeedShooter(turret, top, bottom, drivetrain);
         final FeedShooter m_autoFeed3 = new FeedShooter(turret, top, bottom, drivetrain);
 
-        RunShooter runShooter1 = new RunShooter(shooter, turret, drivetrain, hood, false);
+        RunShooter runShooter = new RunShooter(shooter, turret, drivetrain, hood, false);
         ShootWhileMove shootMove = new ShootWhileMove(shooter, turret, drivetrain, hood, false);
         ShootAtHanger hangShoot = new ShootAtHanger(shooter, turret, drivetrain, hood);
 
@@ -50,10 +50,10 @@ public class Defense5n1 extends SequentialCommandGroup{
             new InstantCommand(()->drivetrain.resetOdometry(fiveoneUno.getInitialPose())),
             new InstantCommand(()->climb.extend()),
             new ParallelCommandGroup(
-                runShooter1,
+                runShooter,
                 new SequentialCommandGroup(
                     fiveoneUno.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
-                    m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop()).andThen(()->runShooter1.end(false))))    
+                    m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop()).andThen(()->runShooter.end(false))))    
                 )
             ),
             new ParallelCommandGroup(
@@ -70,7 +70,7 @@ public class Defense5n1 extends SequentialCommandGroup{
                 new SequentialCommandGroup(
                     fiveoneQuatro.raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom))),
                     new RunIntake(leftIntake).raceWith(new WaitCommand(5.0)),
-                    fiveoneCinco.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
+                    fiveoneCinco.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom)).alongWith(m_autoFeed3)),
                     m_autoFeed3.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed3.stop()))) 
                 
             )
