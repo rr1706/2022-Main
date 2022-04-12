@@ -11,6 +11,7 @@ import frc.robot.commands.FeedShooter;
 import frc.robot.commands.IndexElevator;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunShooter;
+import frc.robot.commands.ShootAtHanger;
 import frc.robot.commands.ZeroClimb;
 import frc.robot.commands.ZeroHood;
 import frc.robot.subsystems.Climber;
@@ -32,28 +33,31 @@ public class Defense2n2 extends SequentialCommandGroup{
         final AutoFromPathPlanner twotwoUno = new AutoFromPathPlanner(drivetrain, "20222n2BallDefense-One", 3.2);
         final AutoFromPathPlanner twotwoDos = new AutoFromPathPlanner(drivetrain, "20222n2BallDefense-Two", 3.2);
         final AutoFromPathPlanner twotwoTres = new AutoFromPathPlanner(drivetrain, "20222n2BallDefense-Three", 3.2);
-        final AutoFromPathPlanner twotwoQuatro = new AutoFromPathPlanner(drivetrain, "20225BallDefense-Four", 3.2);
-        final AutoFromPathPlanner twotwoCinco = new AutoFromPathPlanner(drivetrain, "20225BallDefense-Five", 3.2);
 
         final FeedShooter m_autoFeed = new FeedShooter(turret, top, bottom, drivetrain);
         final FeedShooter m_autoFeed2 = new FeedShooter(turret, top, bottom, drivetrain);
-        final FeedShooter m_autoFeed3 = new FeedShooter(turret, top, bottom, drivetrain);
+
+        RunShooter runShooter = new RunShooter(shooter, turret, drivetrain, hood, false);
 
         addCommands(
             
-            new InstantCommand(()->drivetrain.resetOdometry(fiveBallUno.getInitialPose())),
+            new InstantCommand(()->drivetrain.resetOdometry(twotwoUno.getInitialPose())),
             new InstantCommand(()->climb.extend()),
             new ParallelCommandGroup(
-                new RunShooter(shooter, turret, drivetrain, hood, false),
+                runShooter,
                 new SequentialCommandGroup(
-                    twotwoUno.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
-                    m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop()))), 
-                    twotwoDos.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
-                    m_autoFeed2.raceWith(new WaitCommand(1.5).andThen(new InstantCommand(()->m_autoFeed2.stop()))),
-                    fiveBallTres.andThen(new WaitCommand(1.0)).raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
-                    fiveBallQuatro.raceWith(new IndexElevator(top, bottom)),
-                    m_autoFeed3.raceWith(new WaitCommand(5.0).andThen(new InstantCommand(()->m_autoFeed3.stop())))
-        )));
+                    twotwoUno.raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom))),
+                    m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop()).andThen(()->runShooter.end(false))))    
+                )
+            ),
+            new ParallelCommandGroup(
+                new ShootAtHanger(shooter, turret, drivetrain, hood),
+                new SequentialCommandGroup(
+                    twotwoDos.raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom))),
+                    twotwoTres.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom)),
+                    m_autoFeed2.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed2.stop()))) 
+                ))
+            ));
     }
     
     @Override
