@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.GoalConstants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Utilities.AutoFromPathPlanner;
 import frc.robot.commands.FeedShooter;
@@ -42,10 +43,10 @@ public class Defense5n1 extends SequentialCommandGroup{
         final FeedShooter m_autoFeed = new FeedShooter(turret, top, bottom, drivetrain);
         final FeedShooter m_autoFeed2 = new FeedShooter(turret, top, bottom, drivetrain);
         final FeedShooter m_autoFeed3 = new FeedShooter(turret, top, bottom, drivetrain);
-        final ForceFeed m_moveFeed = new ForceFeed(turret, top, bottom, drivetrain);
+        final ForceFeed m_moveFeed = new ForceFeed(turret, top, bottom, drivetrain, true);
 
         RunShooter runShooter = new RunShooter(shooter, turret, drivetrain, hood, false);
-        ShootWhileMove shootMove = new ShootWhileMove(shooter, turret, drivetrain, hood, false);
+        ShootWhileMove shootMove = new ShootWhileMove(shooter, turret, drivetrain, hood, GoalConstants.kHangerLocation, true, false);
         ShootAtHanger hangShoot = new ShootAtHanger(shooter, turret, drivetrain, hood);
 
         addCommands(

@@ -14,15 +14,17 @@ public class ForceFeed extends CommandBase{
     private final Elevator m_top;
     private final Elevator m_bottom;
     private final Drivetrain m_drive;
+    private boolean m_forced;
     private final Timer m_timer = new Timer();
     private boolean m_End = false;
 
     public ForceFeed(Turret turret, Elevator top, Elevator bottom, Drivetrain
-     drive){
+     drive, boolean forced){
         m_turret = turret;
         m_top = top;
         m_bottom = bottom;
         m_drive = drive;
+        m_forced = forced;
         addRequirements(top,bottom);
     }
 
@@ -38,8 +40,9 @@ public class ForceFeed extends CommandBase{
 
     @Override
     public void execute(){
+        boolean isRobotMoving = Math.abs(m_drive.getChassisSpeed().vxMetersPerSecond)>0.25 || Math.abs(m_drive.getChassisSpeed().vyMetersPerSecond)>0.25 || Math.abs(m_drive.getChassisSpeed().omegaRadiansPerSecond)>0.25;
         boolean isRobotRotating = Math.abs(m_drive.getFieldRelativeSpeed().omega) > Math.PI/3.0;
-        boolean canShoot = !isRobotRotating && Math.abs(m_drive.getFieldRelativeAccel().alpha) <= 1.00;
+        boolean canShoot = ((!isRobotRotating && Math.abs(m_drive.getFieldRelativeAccel().alpha) <= 1.00) && m_forced) || (!isRobotMoving && !m_forced);
             if(canShoot){
                 m_top.run();
                 if(m_timer.get()>0.100){
@@ -56,6 +59,11 @@ public class ForceFeed extends CommandBase{
         
         
     }
+
+    public void setForced(boolean forced) {
+        m_forced = forced;
+    }
+
     @Override
     public void end(boolean interrupted){
         m_timer.stop();
@@ -66,6 +74,7 @@ public class ForceFeed extends CommandBase{
     public void stop(){
         m_End = true;
     }
+
     @Override
     public boolean isFinished(){
         return m_End;

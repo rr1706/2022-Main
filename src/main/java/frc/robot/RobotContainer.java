@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.GoalConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -102,11 +103,11 @@ public class RobotContainer {
   private final Extend m_extend= new Extend(m_climber);
 
   private final RunShooter m_runShooter = new RunShooter(m_shooter, m_turret, m_robotDrive, m_hood, true);
-  private final ShootWhileMove m_moveShoot = new ShootWhileMove(m_shooter, m_turret, m_robotDrive, m_hood, true);
+  private final ShootWhileMove m_moveShoot = new ShootWhileMove(m_shooter, m_turret, m_robotDrive, m_hood, GoalConstants.kGoalLocation, true, true);
   private final ShootAtHanger m_aimHanger = new ShootAtHanger(m_shooter, m_turret, m_robotDrive, m_hood);
 
   private final FeedShooter m_feedShooter = new FeedShooter(m_turret, m_highElevator, m_lowElevator, m_robotDrive);
-  private final ForceFeed m_forceFeed = new ForceFeed(m_turret, m_highElevator, m_lowElevator, m_robotDrive);
+  private final ForceFeed m_forceFeed = new ForceFeed(m_turret, m_highElevator, m_lowElevator, m_robotDrive, true);
 
   private final DriveByController m_drive = new DriveByController(m_robotDrive, m_driverController);
 

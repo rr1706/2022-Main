@@ -30,7 +30,7 @@ public class RunShooter extends CommandBase {
 
     
 
-    public RunShooter(Shooter shooter, Turret turret, Drivetrain drive,ShooterHood hood, boolean updatePose){
+    public RunShooter(Shooter shooter, Turret turret, Drivetrain drive, ShooterHood hood, boolean updatePose){
         m_shooter = shooter;
         m_turret = turret;
         m_drive = drive;
