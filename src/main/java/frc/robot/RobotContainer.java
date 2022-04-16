@@ -35,7 +35,6 @@ import frc.robot.commands.FaceTurret;
 import frc.robot.commands.FeedShooter;
 import frc.robot.commands.IndexElevator;
 import frc.robot.commands.InitiateClimbMode;
-import frc.robot.commands.MoveFeed;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunShooter;
 import frc.robot.commands.RunShooter;
