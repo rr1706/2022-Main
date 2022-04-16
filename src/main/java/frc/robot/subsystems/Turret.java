@@ -8,6 +8,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.CurrentLimit;
@@ -21,6 +23,7 @@ public class Turret extends PIDSubsystem {
     private final AnalogPotentiometer m_encoder = new AnalogPotentiometer(4, 2*Math.PI*1.011, -0.007636);
     private final CANSparkMax m_motor = new CANSparkMax(14, MotorType.kBrushed);
     private boolean m_trackTarget = false;
+    private double m_desiredAngle = 0.0;
 
     public Turret(){
         super(new PIDController(
@@ -37,7 +40,7 @@ public class Turret extends PIDSubsystem {
     }
 
     public double getMeasurement(){
-        double angle = MathUtils.toUnitCircAngle(-1.0*m_encoder.get())+0.1544-0.0244;
+        double angle = MathUtils.toUnitCircAngle(-1.0*m_encoder.get())+0.1544;
        // SmartDashboard.putNumber("Turret Encoder", angle);
         return angle;
     }
@@ -62,6 +65,8 @@ public class Turret extends PIDSubsystem {
       }
 
       SmartDashboard.putNumber("Turret Set Angle", angle);
+
+      m_desiredAngle = angle;
 
       if (angle < TurretConstants.kTurretLow) {
         angle = TurretConstants.kTurretLow;
@@ -98,6 +103,8 @@ public class Turret extends PIDSubsystem {
           } else {
             Limelight.disable();
           }
+
+          m_desiredAngle = angle;
 
    //When the Limelight has a valid solution , use the limelight tx() angle and add it to the current turret postiion to 
     //determine the updated setpoint for the turret
@@ -162,6 +169,15 @@ public class Turret extends PIDSubsystem {
     public boolean atSetpoint(){
         return m_controller.atSetpoint();
     }
+
+    public boolean atDesiredAngle(){
+      return Math.abs(m_desiredAngle-getMeasurement()) <= TurretConstants.kTurretTolerance;
+    }
+
+    public boolean desiredInDeadzone(){
+      return (m_desiredAngle >= TurretConstants.kTurretHigh-0.02 || m_desiredAngle <= TurretConstants.kTurretLow+0.02);
+    }
+
     public void climbMode(){
         setSetpoint(Math.PI);
     }
