@@ -7,8 +7,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.GlobalConstants;
 import frc.robot.Constants.GoalConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Utilities.FieldRelativeAccel;
+import frc.robot.Utilities.FieldRelativeSpeed;
 import frc.robot.Utilities.LinearInterpolationTable;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
@@ -22,19 +25,32 @@ public class RunShooter extends CommandBase {
     private final Turret m_turret;
     private final Drivetrain m_drive;
     private final ShooterHood m_hood;
+    private Translation2d m_target;
+    private boolean m_moving;
     private final boolean m_updatePose;
     private final Timer m_timer = new Timer();
 
+    private static Point2D[] m_shotTimes = 
+        new Point2D.Double[]{
+            //(ty-angle,time)
+            new Point2D.Double(75,0.85),//
+            new Point2D.Double(90,0.85),//
+            new Point2D.Double(165,0.85),//
+            new Point2D.Double(240,1.05)//
+        };
+    private static LinearInterpolationTable m_timeTable = new LinearInterpolationTable(m_shotTimes);
+
     private static LinearInterpolationTable m_hoodTable = ShooterConstants.khoodTable;
     private static LinearInterpolationTable m_rpmTable = ShooterConstants.krpmTable;
-
     
 
-    public RunShooter(Shooter shooter, Turret turret, Drivetrain drive, ShooterHood hood, boolean updatePose){
+    public RunShooter(Shooter shooter, Turret turret, Drivetrain drive, ShooterHood hood, Translation2d target, boolean moving, boolean updatePose) {
         m_shooter = shooter;
         m_turret = turret;
         m_drive = drive;
         m_hood = hood;
+        m_target = target;
+        m_moving = moving;
         m_updatePose = updatePose;
         addRequirements(shooter, turret, hood);
     }
@@ -52,44 +68,51 @@ public class RunShooter extends CommandBase {
 
     @Override
     public void execute(){
+        double currentTime = m_timer.get();        
         SmartDashboard.putBoolean("Shooter Running", true);
-        Translation2d robotToGoal = GoalConstants.kGoalLocation.minus(m_drive.getPose().getTranslation());
+
+        FieldRelativeSpeed robotVel = m_drive.getFieldRelativeSpeed();
+        FieldRelativeAccel robotAccel = m_drive.getFieldRelativeAccel();
+
+        Translation2d robotToGoal = m_target.minus(m_drive.getPose().getTranslation());
         double dist = robotToGoal.getDistance(new Translation2d())*39.37;
-        SmartDashboard.putNumber("Calculated (in)", dist);
-        if(Limelight.valid()){
-            dist = Limelight.getDistance();
-            SmartDashboard.putNumber("Limelight (in)", dist);
-            if(SmartDashboard.getBoolean("Adjust Shot?", false)){
-                m_shooter.run(m_rpmTable.getOutput(dist)+SmartDashboard.getNumber("SetShotAdjust", 0));
-                m_hood.run(m_hoodTable.getOutput(dist)+SmartDashboard.getNumber("SetHoodAdjust", 0));
-            } 
-            else{
-                m_shooter.run(m_rpmTable.getOutput(dist));
-                m_hood.run(m_hoodTable.getOutput(dist));
-            }
-        }
-        else{
+
+        double fixedShotTime = m_timeTable.getOutput(dist);
+
+        double virtualGoalX = m_target.getX()-fixedShotTime*(robotVel.vx+robotAccel.ax*ShooterConstants.kAccelCompFactor);
+        double virtualGoalY = m_target.getY()-fixedShotTime*(robotVel.vy+robotAccel.ay*ShooterConstants.kAccelCompFactor);
+
+        SmartDashboard.putNumber("Goal X", virtualGoalX);
+        SmartDashboard.putNumber("Goal Y", virtualGoalY);
+
+        Translation2d movingGoalLocation = new Translation2d(virtualGoalX,virtualGoalY);
+
+        Translation2d toMovingGoal = movingGoalLocation.minus(m_drive.getPose().getTranslation());
+
+        double newDist = toMovingGoal.getDistance(new Translation2d())*39.37;
 
             if(SmartDashboard.getBoolean("Adjust Shot?", false)){
-                m_shooter.run(m_rpmTable.getOutput(dist)+SmartDashboard.getNumber("SetShotAdjust", 0));
-                m_hood.run(m_hoodTable.getOutput(dist)+SmartDashboard.getNumber("SetHoodAdjust", 0));
+                m_shooter.run(ShooterConstants.krpmTable.getOutput(newDist)+SmartDashboard.getNumber("SetShotAdjust", 0));
+                m_hood.run(m_hoodTable.getOutput(newDist)+SmartDashboard.getNumber("SetHoodAdjust", 0));
             } 
             else{
-                m_shooter.run(m_rpmTable.getOutput(dist));
-                m_hood.run(m_hoodTable.getOutput(dist));
+                m_shooter.run(m_rpmTable.getOutput(newDist));
+                m_hood.run(m_hoodTable.getOutput(newDist));
             }
 
+        if (m_moving) {
+            m_turret.aimAtGoal(m_drive.getPose(), movingGoalLocation);
+        } else {
+            m_turret.aimAtGoal(m_drive.getPose(), m_target);
         }
-        m_turret.setAngle(m_drive.getPose());
-        double currentTime = m_timer.get();
-        
+
         if(currentTime > 0.250 && Limelight.valid()){// && !robotMovingFast(m_drive.getChassisSpeed())){
             double dL = Limelight.getDistance()*0.0254;
             double tR = m_drive.getGyro().getRadians();
             double tT = m_turret.getMeasurement()-Math.PI;
             double tL = -1.0*Limelight.tx();
     
-            Pose2d pose = calcPoseFromVision(dL, tR, tT, tL, GoalConstants.kGoalLocation);
+            Pose2d pose = calcPoseFromVision(dL, tR, tT, tL, m_target);
     
             if(m_updatePose){
                 m_drive.setPose(pose);
@@ -116,18 +139,13 @@ public class RunShooter extends CommandBase {
     
         return new Pose2d(rX,rY, new Rotation2d(-tR));
     }
-    
-    private boolean robotMovingFast(ChassisSpeeds input){
-        double speed = Math.sqrt(Math.pow(input.vxMetersPerSecond,2)+Math.pow(input.vyMetersPerSecond, 2));
-        double angleSpeed = Math.abs(input.omegaRadiansPerSecond);
-    
-        if(speed > 1.000 || angleSpeed > 0.050){
-            return true;
-        }
-        else{
-            return false;
-        }
-    
+
+    public void setMoveShoot(boolean move) {
+        m_moving = move;
+    }
+
+    public void setTarget(Translation2d target) {
+        m_target = target;
     }
 
 }

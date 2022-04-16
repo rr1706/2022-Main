@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.GoalConstants;
 import frc.robot.Utilities.AutoFromPathPlanner;
 import frc.robot.commands.FeedShooter;
 import frc.robot.commands.IndexElevator;
@@ -24,7 +25,7 @@ public class TwoBallOne extends SequentialCommandGroup {
 
     public TwoBallOne(Drivetrain drivetrain, Intake leftIntake, Intake rightIntake, Elevator bottom, Elevator top, Turret turret, ShooterHood hood, Shooter shooter, Climber climb){
         final AutoFromPathPlanner twoBallPath = new AutoFromPathPlanner(drivetrain, "20222BallAuto-one", 3.2);
-        final FeedShooter m_autoFeed = new FeedShooter(turret, top, bottom, drivetrain);
+        final FeedShooter m_autoFeed = new FeedShooter(turret, top, bottom, drivetrain, false);
 
         m_drive = drivetrain;
 
@@ -32,7 +33,7 @@ public class TwoBallOne extends SequentialCommandGroup {
             new InstantCommand(()->drivetrain.resetOdometry(twoBallPath.getInitialPose())),
             new InstantCommand(()->climb.extend()),
             new ParallelCommandGroup(
-                new RunShooter(shooter, turret, drivetrain, hood, false),
+                new RunShooter(shooter, turret, drivetrain, hood, GoalConstants.kGoalLocation, false, false),
                 new SequentialCommandGroup(
                     twoBallPath.raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom))),
                     m_autoFeed.raceWith(new WaitCommand(2.0).andThen(new InstantCommand(()->m_autoFeed.stop())))))

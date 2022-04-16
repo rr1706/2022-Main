@@ -10,12 +10,9 @@ import frc.robot.Constants.GoalConstants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Utilities.AutoFromPathPlanner;
 import frc.robot.commands.FeedShooter;
-import frc.robot.commands.ForceFeed;
 import frc.robot.commands.IndexElevator;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunShooter;
-import frc.robot.commands.ShootAtHanger;
-import frc.robot.commands.ShootWhileMove;
 import frc.robot.commands.ZeroClimb;
 import frc.robot.commands.ZeroHood;
 import frc.robot.subsystems.Climber;
@@ -40,28 +37,24 @@ public class Defense5n1 extends SequentialCommandGroup{
         final AutoFromPathPlanner fiveoneQuatro = new AutoFromPathPlanner(drivetrain, "20225n1BallDefense-Four", 3.2);
         final AutoFromPathPlanner fiveoneCinco = new AutoFromPathPlanner(drivetrain, "20225n1BallDefense-FIve", 3.2);
 
-        final FeedShooter m_autoFeed = new FeedShooter(turret, top, bottom, drivetrain);
-        final FeedShooter m_autoFeed2 = new FeedShooter(turret, top, bottom, drivetrain);
-        final FeedShooter m_autoFeed3 = new FeedShooter(turret, top, bottom, drivetrain);
-        final ForceFeed m_moveFeed = new ForceFeed(turret, top, bottom, drivetrain, true);
-
-        RunShooter runShooter = new RunShooter(shooter, turret, drivetrain, hood, false);
-        ShootWhileMove shootMove = new ShootWhileMove(shooter, turret, drivetrain, hood, GoalConstants.kHangerLocation, true, false);
-        ShootAtHanger hangShoot = new ShootAtHanger(shooter, turret, drivetrain, hood);
+        final FeedShooter m_autoFeed = new FeedShooter(turret, top, bottom, drivetrain, false);
+        final FeedShooter m_autoFeed2 = new FeedShooter(turret, top, bottom, drivetrain, false);
+        final FeedShooter m_autoFeed3 = new FeedShooter(turret, top, bottom, drivetrain, false);
+        final FeedShooter m_moveFeed = new FeedShooter(turret, top, bottom, drivetrain, true);
 
         addCommands(
             
             new InstantCommand(()->drivetrain.resetOdometry(fiveoneUno.getInitialPose())),
             new InstantCommand(()->climb.extend()),
             new ParallelRaceGroup(
-                runShooter,
+                new RunShooter(shooter, turret, drivetrain, hood, GoalConstants.kGoalLocation, false, false),
                 new SequentialCommandGroup(
                     fiveoneUno.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
                     m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop())))    
                 )
             ),
             new ParallelRaceGroup(
-                hangShoot,
+                new RunShooter(shooter, turret, drivetrain, hood, GoalConstants.kHangerLocation, false, false),
                 new SequentialCommandGroup(
                     fiveoneDos.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
                     fiveoneTres,
@@ -70,7 +63,7 @@ public class Defense5n1 extends SequentialCommandGroup{
             )),
 
             new ParallelRaceGroup(
-                shootMove,
+                new RunShooter(shooter, turret, drivetrain, hood, GoalConstants.kGoalLocation, true, false),
                 new SequentialCommandGroup(
                     fiveoneQuatro.raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom))),
                     new RunIntake(leftIntake).raceWith(new WaitCommand(5.0)),

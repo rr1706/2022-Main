@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.GoalConstants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Utilities.AutoFromPathPlanner;
 import frc.robot.commands.FeedShooter;
@@ -34,16 +35,16 @@ public class FiveBall extends SequentialCommandGroup{
         final AutoFromPathPlanner fiveBallTres = new AutoFromPathPlanner(drivetrain, "20225BallAuto-tres", 3.2);
         final AutoFromPathPlanner fiveBallQuatro = new AutoFromPathPlanner(drivetrain, "20225BallAuto-quatro", 3.2);
 
-        final FeedShooter m_autoFeed = new FeedShooter(turret, top, bottom, drivetrain);
-        final FeedShooter m_autoFeed2 = new FeedShooter(turret, top, bottom, drivetrain);
-        final FeedShooter m_autoFeed3 = new FeedShooter(turret, top, bottom, drivetrain);
+        final FeedShooter m_autoFeed = new FeedShooter(turret, top, bottom, drivetrain, false);
+        final FeedShooter m_autoFeed2 = new FeedShooter(turret, top, bottom, drivetrain, false);
+        final FeedShooter m_autoFeed3 = new FeedShooter(turret, top, bottom, drivetrain, false);
 
         addCommands(
             
             new InstantCommand(()->drivetrain.resetOdometry(fiveBallUno.getInitialPose())),
             new InstantCommand(()->climb.extend()),
             new ParallelCommandGroup(
-                new RunShooter(shooter, turret, drivetrain, hood, false),
+                new RunShooter(shooter, turret, drivetrain, hood, GoalConstants.kHangerLocation, false, false),
                 new SequentialCommandGroup(
                     fiveBallUno.raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
                     m_autoFeed.raceWith(new WaitCommand(1.0).andThen(new InstantCommand(()->m_autoFeed.stop()))), 

@@ -29,7 +29,6 @@ import frc.robot.Utilities.JoystickAnalogButton.Side;
 import frc.robot.commands.ClimbFromFloor;
 import frc.robot.commands.ClimbToNext;
 import frc.robot.commands.FinalClimb;
-import frc.robot.commands.ForceFeed;
 import frc.robot.commands.Extend;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.FaceTurret;
@@ -38,8 +37,7 @@ import frc.robot.commands.IndexElevator;
 import frc.robot.commands.InitiateClimbMode;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunShooter;
-import frc.robot.commands.ShootAtHanger;
-import frc.robot.commands.ShootWhileMove;
+import frc.robot.commands.RunShooter;
 import frc.robot.commands.Test;
 import frc.robot.commands.UnjamIntake;
 import frc.robot.commands.ZeroClimb;
@@ -102,12 +100,12 @@ public class RobotContainer {
   private final FinalClimb m_finalClimb = new FinalClimb(m_climber);
   private final Extend m_extend= new Extend(m_climber);
 
-  private final RunShooter m_runShooter = new RunShooter(m_shooter, m_turret, m_robotDrive, m_hood, true);
-  private final ShootWhileMove m_moveShoot = new ShootWhileMove(m_shooter, m_turret, m_robotDrive, m_hood, GoalConstants.kGoalLocation, true, true);
-  private final ShootAtHanger m_aimHanger = new ShootAtHanger(m_shooter, m_turret, m_robotDrive, m_hood);
+  private final RunShooter m_runShooter = new RunShooter(m_shooter, m_turret, m_robotDrive, m_hood, GoalConstants.kGoalLocation, false, true);
+  private final RunShooter m_moveShoot = new RunShooter(m_shooter, m_turret, m_robotDrive, m_hood, GoalConstants.kGoalLocation, true, true);
+  private final RunShooter m_aimHanger = new RunShooter(m_shooter, m_turret, m_robotDrive, m_hood, GoalConstants.kHangerLocation, true, true);
 
-  private final FeedShooter m_feedShooter = new FeedShooter(m_turret, m_highElevator, m_lowElevator, m_robotDrive);
-  private final ForceFeed m_forceFeed = new ForceFeed(m_turret, m_highElevator, m_lowElevator, m_robotDrive, true);
+  private final FeedShooter m_feedShooter = new FeedShooter(m_turret, m_highElevator, m_lowElevator, m_robotDrive, false);
+  private final FeedShooter m_forceFeed = new FeedShooter(m_turret, m_highElevator, m_lowElevator, m_robotDrive, true);
 
   private final DriveByController m_drive = new DriveByController(m_robotDrive, m_driverController);
 
