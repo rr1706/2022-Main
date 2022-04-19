@@ -4,11 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.GlobalConstants;
 import frc.robot.subsystems.Limelight;
 
 /**
@@ -66,6 +68,9 @@ public class Robot extends TimedRobot {
       Limelight.enable();
       SmartDashboard.putNumber("Limelight ty", Limelight.ty());
     }
+
+    PneumaticHub pneumaticHub = new PneumaticHub(GlobalConstants.PCHID);
+    SmartDashboard.putNumber("Compressor Current", pneumaticHub.getCompressorCurrent());
 
   }
 

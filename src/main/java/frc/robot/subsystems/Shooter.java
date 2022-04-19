@@ -59,9 +59,18 @@ public class Shooter extends SubsystemBase{
     }
 
     public void run(double rpm) {
+        if(rpm>=4000){
+            rpm = 4000;
+        }
         m_RPM = rpm;
         double outputPID = m_PID.calculate(m_encoder1.getVelocity(), m_RPM);
         double outputFF = m_FF.calculate(m_RPM);
+        double output = outputPID+outputFF;
+
+        if(output <= -0.25){
+            output = -0.25;
+        }
+
         m_motor1.set(outputPID+outputFF);
     }
 

@@ -117,9 +117,9 @@ import frc.robot.Utilities.FieldRelativeSpeed;
       m_lastFieldRelAccel = m_fieldRelAccel;
       m_lastFieldRelVel = m_fieldRelVel;
 
-      SmartDashboard.putNumber("Accel X", m_fieldRelAccel.ax);
-      SmartDashboard.putNumber("Accel Y", m_fieldRelAccel.ay);
-      SmartDashboard.putNumber("Alpha", m_fieldRelAccel.alpha);
+      //SmartDashboard.putNumber("Accel X", m_fieldRelAccel.ax);
+      //SmartDashboard.putNumber("Accel Y", m_fieldRelAccel.ay);
+      //SmartDashboard.putNumber("Alpha", m_fieldRelAccel.alpha);
 
         //SmartDashboard.putNumber("Front Left Encoder", m_frontLeft.getTurnEncoder());
         //SmartDashboard.putNumber("Front Right Encoder", m_frontRight.getTurnEncoder());

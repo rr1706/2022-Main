@@ -25,7 +25,8 @@ public final class Constants {
 
   public static final class GoalConstants{
     public static final Translation2d kGoalLocation = new Translation2d(8.23,4.115);
-    public static final Translation2d kHangerLocation = new Translation2d(1.67,6.70);
+    public static final Translation2d kWrongBallGoal = new Translation2d(5.50,4.115);
+    public static final Translation2d kHangerLocation = new Translation2d(2.00,6.00);
 
   }
 
@@ -154,11 +155,11 @@ public final class Constants {
   public static final class TurretConstants {
     public static final int kTurretPort = 14;                    //CANID of the turret motor controller
     public static final int kTurretPotentiometerPort = 4;       //Analog port of the turret analog potentiometer
-    public static final double kTurretTolerance = 0.01745;    //allowable angle error in radians for the PIDSubsystem to report atSetpoint() to true
+    public static final double kTurretTolerance = 2*0.0349;    //allowable angle error in radians for the PIDSubsystem to report atSetpoint() to true
     public static final double[] kTurretPID = { 4.0, 0.0, 0 };  //Defines the PID values for rotation of the turret
     public static final double kStaticGain = 0.025;             //Limits Integral term so as to not wind up values when making larger moves
-    public static final double kTurretLow = 0.26;               //Minimum angle in radians allowed (defines the turret deadzone)
-    public static final double kTurretHigh = 6.02;              //Maximum angle in radians allowed (defines the turret deadzone)
+    public static final double kTurretLow = 0.50;               //Minimum angle in radians allowed (defines the turret deadzone)
+    public static final double kTurretHigh = 5.78;              //Maximum angle in radians allowed (defines the turret deadzone)
   }
 
   public static final class ClimberConstants {
@@ -168,7 +169,7 @@ public final class Constants {
 
   public static final class HoodConstants{
     public static final int kMotorID = 11;
-    public static final double kHoodTolerance = 1.0;
+    public static final double kHoodTolerance = 5.0;
   }
 
   /**
@@ -176,7 +177,7 @@ public final class Constants {
    */
   public static final class ShooterConstants {
     public static final int[] kMotorIDs = {12,13};        //CANID of the Motor Controller for the Sooter Motor
-    public static final double kShotRPMTolerance = 50.0;          //RPMs of error allowed before a ball can be fed into t he shooter
+    public static final double kShotRPMTolerance = 200.0;          //RPMs of error allowed before a ball can be fed into t he shooter
     public static final double[] kPID = { 0.00005, 0.0003, 0 };         //Defines PID values for the shooter 0.00045
     public static final double kShooterFF = 0.018;            //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
     public static final double kStaticGain = 0.0001635;
@@ -186,39 +187,39 @@ public final class Constants {
     private static final Point2D[] khoodPoints = 
         new Point2D.Double[]{
             //(ty-angle,distance)
+            new Point2D.Double(25,0.0),
             new Point2D.Double(35,0.0),
-            new Point2D.Double(50,0.0),
             new Point2D.Double(75,10.0),//
             new Point2D.Double(90,15.5),//
-            new Point2D.Double(105,19.0),//
+            new Point2D.Double(105,18.4),//
             new Point2D.Double(120,23.0),//
-            new Point2D.Double(135,25.5),//
-            new Point2D.Double(150,27.5),//
-            new Point2D.Double(165,29.5),//
-            new Point2D.Double(180,33.0),//
+            new Point2D.Double(135,26.0),//
+            new Point2D.Double(150,28.0),//
+            new Point2D.Double(165,30.5),//
+            new Point2D.Double(180,32.0),//
             new Point2D.Double(195,36.0),//
-            new Point2D.Double(210,38.0),//
-            new Point2D.Double(240,38.0)//
+            new Point2D.Double(210,37.0),//
+            new Point2D.Double(225,38.0)//
         };
     public static final LinearInterpolationTable khoodTable = new LinearInterpolationTable(khoodPoints);
 
     private static final Point2D[] krpmPoints = 
         new Point2D.Double[]{
             //(ty-angle,distance)
-            new Point2D.Double(35,2350),
-            new Point2D.Double(50,2350),
-            new Point2D.Double(75,2375),//
-            new Point2D.Double(90,2480),//
-            new Point2D.Double(105,2510),//
-            new Point2D.Double(120,2610),//
-            new Point2D.Double(135,2695),//
-            new Point2D.Double(150,2785),//
-            new Point2D.Double(165,2885),//
-            new Point2D.Double(180,3045),//
-            new Point2D.Double(195,3180),//
+            new Point2D.Double(25,1500),
+            new Point2D.Double(35,1500),
+            new Point2D.Double(75,2350),//
+            new Point2D.Double(90,2460),//
+            new Point2D.Double(105,2515),//
+            new Point2D.Double(120,2620),//
+            new Point2D.Double(135,2715),//
+            new Point2D.Double(150,2815),//
+            new Point2D.Double(165,2900),//
+            new Point2D.Double(180,3050),//
+            new Point2D.Double(195,3195),//
             new Point2D.Double(210,3315),//
-            new Point2D.Double(240,3500),//
-            new Point2D.Double(280,3850),
+            new Point2D.Double(225,3450),//
+            new Point2D.Double(350,3730)
         };
 
     public static final LinearInterpolationTable krpmTable = new LinearInterpolationTable(krpmPoints);

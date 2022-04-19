@@ -45,8 +45,8 @@ public class ShootAtHanger extends CommandBase {
     @Override
     public void execute(){
         SmartDashboard.putBoolean("Shooter Running", true);
-        m_turret.aimAtGoal(m_drive.getPose(), GoalConstants.kHangerLocation);
-        m_shooter.run(1500);
+        m_turret.aimAtGoal(m_drive.getPose(), GoalConstants.kHangerLocation, false);
+        m_shooter.run(1200);
         m_hood.run(38.0);
     }
 

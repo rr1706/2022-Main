@@ -14,8 +14,8 @@ public class Extend extends CommandBase{
 
     @Override
     public void initialize(){
-        m_climber.changeConstraints(new Constraints(100,50));
-        m_climber.setDesiredPose(79.0);
+        m_climber.changeConstraints(new Constraints(100,250));
+        m_climber.setDesiredPose(72.0);
         m_hasExtended = false;
     }
     @Override

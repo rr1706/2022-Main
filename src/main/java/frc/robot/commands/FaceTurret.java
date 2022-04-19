@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Swerve.*;
@@ -23,6 +24,7 @@ public class FaceTurret extends CommandBase {
     @Override
     public void execute() {
         m_turret.setAngle(m_robotDrive.getPose());
+        SmartDashboard.putNumber("Turret Angle", m_turret.getMeasurement());
     }
 
     @Override

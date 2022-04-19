@@ -19,7 +19,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Climber extends SubsystemBase {
 
-    private double m_pose = 5.0;
+    private double m_pose = 2.0;
     private final CANSparkMax m_motor1 = new CANSparkMax(ClimberConstants.kMotorID[0], MotorType.kBrushless);
     private final CANSparkMax m_motor2 = new CANSparkMax(ClimberConstants.kMotorID[1], MotorType.kBrushless);
     private final RelativeEncoder m_encoder = m_motor1.getEncoder();

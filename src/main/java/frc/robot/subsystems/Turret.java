@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.time.Period;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -20,7 +22,7 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.Utilities.MathUtils;
 
 public class Turret extends PIDSubsystem {
-    private final AnalogPotentiometer m_encoder = new AnalogPotentiometer(4, 2*Math.PI*1.011, -0.007636);
+    private final AnalogPotentiometer m_encoder = new AnalogPotentiometer(4, 2*Math.PI*1.011*1.0149, -0.007636);
     private final CANSparkMax m_motor = new CANSparkMax(14, MotorType.kBrushed);
     private boolean m_trackTarget = false;
     private double m_desiredAngle = 0.0;
@@ -40,7 +42,7 @@ public class Turret extends PIDSubsystem {
     }
 
     public double getMeasurement(){
-        double angle = MathUtils.toUnitCircAngle(-1.0*m_encoder.get())+0.1544;
+        double angle = MathUtils.toUnitCircAngle(-1.0*m_encoder.get()+0.1544-0.0764+0.021);
        // SmartDashboard.putNumber("Turret Encoder", angle);
         return angle;
     }
@@ -51,7 +53,7 @@ public class Turret extends PIDSubsystem {
 
     } */
 
-    public void aimAtGoal(Pose2d robotPose, Translation2d goal){
+    public void aimAtGoal(Pose2d robotPose, Translation2d goal, boolean aimAtVision){
       Translation2d robotToGoal = goal.minus(robotPose.getTranslation());
       double angle = Math.atan2(robotToGoal.getY(),robotToGoal.getX());
       angle = Math.PI+angle-robotPose.getRotation().getRadians();
@@ -66,7 +68,13 @@ public class Turret extends PIDSubsystem {
 
       SmartDashboard.putNumber("Turret Set Angle", angle);
 
+
+      if (aimAtVision && Limelight.valid()) {
+        angle = getMeasurement() - Limelight.tx();
+      } 
+
       m_desiredAngle = angle;
+
 
       if (angle < TurretConstants.kTurretLow) {
         angle = TurretConstants.kTurretLow;
@@ -104,13 +112,14 @@ public class Turret extends PIDSubsystem {
             Limelight.disable();
           }
 
-          m_desiredAngle = angle;
-
    //When the Limelight has a valid solution , use the limelight tx() angle and add it to the current turret postiion to 
     //determine the updated setpoint for the turret
      if (m_trackTarget && Limelight.valid()) {
         angle = getMeasurement() - Limelight.tx();
       } 
+
+      m_desiredAngle = angle;
+
       //if the angle setpoint is lower than the minimum allowed position, set the setpoint to the minimum allowed position
       //and set the turret to search clockwise 
       if (angle < TurretConstants.kTurretLow) {
@@ -175,7 +184,7 @@ public class Turret extends PIDSubsystem {
     }
 
     public boolean desiredInDeadzone(){
-      return (m_desiredAngle >= TurretConstants.kTurretHigh-0.02 || m_desiredAngle <= TurretConstants.kTurretLow+0.02);
+      return (m_desiredAngle >= TurretConstants.kTurretHigh-0.20 || m_desiredAngle <= TurretConstants.kTurretLow+0.20);
     }
 
     public void climbMode(){
