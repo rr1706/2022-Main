@@ -76,20 +76,21 @@ public class FOIntake extends CommandBase {
     public void execute(){
         SmartDashboard.putBoolean(m_intake.getID() + " Running", true);
         final double currentTime = m_timer.get();
-        if(m_intake.getCurrent()>12.5 && currentTime>0.250 && !m_ballDetected)
+/*         if(m_intake.getCurrent()>12.5 && currentTime>0.250 && !m_ballDetected)
         {
             m_ballTime = currentTime;
             m_ballDetected = true;
-            m_intake.run(6000);
+            m_intake.run(11000);
         }
         else if(!m_ballDetected){
-            m_intake.run(10000);
+            m_intake.run(11000);
         }
         else if(m_ballDetected && Math.abs(m_ballTime-currentTime)>0.50){
             m_ballDetected = false;
             m_ballTime = 0.0;
             m_timer.reset();
-        }
+        } */
+        m_intake.run(11000);
 
     }
 
