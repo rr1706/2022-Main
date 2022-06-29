@@ -77,7 +77,7 @@ public class InitiateClimbMode extends CommandBase {
             * DriveConstants.kMaxAngularSpeed/3.0,
         true);
 
-    if(m_turret.atSetpoint() && !m_climbModeReady){
+    if(m_turret.atDesiredAngle() && !m_climbModeReady){
         m_climbModeReady = true;
         m_climber.setDesiredPose(76.0);
         m_climber.run();

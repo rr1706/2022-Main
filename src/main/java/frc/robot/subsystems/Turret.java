@@ -1,19 +1,17 @@
 package frc.robot.subsystems;
 
-import java.time.Period;
-
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CurrentLimit;
 import frc.robot.Constants.GlobalConstants;
 import frc.robot.Constants.GoalConstants;
@@ -21,29 +19,33 @@ import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Utilities.MathUtils;
 
-public class Turret extends PIDSubsystem {
-    private final AnalogPotentiometer m_encoder = new AnalogPotentiometer(4, 2*Math.PI*1.011*1.0149, -0.007636);
-    private final CANSparkMax m_motor = new CANSparkMax(14, MotorType.kBrushed);
+public class Turret extends SubsystemBase {
+    private final CANSparkMax m_motor = new CANSparkMax(14, MotorType.kBrushless);
+    private final SparkMaxPIDController m_controller = m_motor.getPIDController();
+    private final RelativeEncoder m_encoder = m_motor.getEncoder();
+
     private boolean m_trackTarget = false;
     private double m_desiredAngle = 0.0;
 
     public Turret(){
-        super(new PIDController(
-            TurretConstants.kTurretPID[0], TurretConstants.kTurretPID[1], TurretConstants.kTurretPID[2]));
-            m_controller.disableContinuousInput();
-            m_controller.setSetpoint(Math.PI);
+        m_controller.setP(0.00005,0);
+        m_controller.setFF(0.000175,0);
+        m_controller.setSmartMotionMaxAccel(20000.0,0);
+        m_controller.setSmartMotionMaxVelocity(5000.0, 0);
         m_motor.setIdleMode(IdleMode.kBrake);
-        m_motor.setInverted(true);
+        m_motor.setInverted(false);
+        m_motor.setSoftLimit(SoftLimitDirection.kForward, (float)55.7575757);
+        m_motor.setSoftLimit(SoftLimitDirection.kReverse,  (float)2.4242424);
         m_motor.setSmartCurrentLimit(CurrentLimit.kTurret);
         m_motor.enableVoltageCompensation(GlobalConstants.kVoltCompensation);
         m_motor.burnFlash();
-        m_controller.setTolerance(TurretConstants.kTurretTolerance);
+
+        m_encoder.setPosition(29.090909);
         SmartDashboard.putBoolean("EnableLimelight", false);
     }
 
     public double getMeasurement(){
-        double angle = MathUtils.toUnitCircAngle(-1.0*m_encoder.get()+0.1544-0.0764+0.021);
-       // SmartDashboard.putNumber("Turret Encoder", angle);
+        double angle = m_encoder.getPosition()*0.0171875*2*Math.PI;
         return angle;
     }
 
@@ -70,7 +72,7 @@ public class Turret extends PIDSubsystem {
 
 
       if (aimAtVision && Limelight.valid()) {
-        angle = getMeasurement() - Limelight.tx();
+        angle = getMeasurement() + Limelight.tx();
       } 
 
       m_desiredAngle = angle;
@@ -84,19 +86,16 @@ public class Turret extends PIDSubsystem {
       else if (angle > TurretConstants.kTurretHigh) {
         angle = TurretConstants.kTurretHigh;
       } 
-      else{
-        setSetpoint(angle);
-      }
+
+      double neoRevs = angle*58.1818181/(2*Math.PI); 
+
+      m_controller.setReference(neoRevs, ControlType.kSmartMotion);
     }
 
     public void setAngle(Pose2d robotPose){
 
     
         Translation2d robotToGoal = GoalConstants.kGoalLocation.minus(robotPose.getTranslation());
-
-        //double dist = robotToGoal.getDistance(new Translation2d());
-        //SmartDashboard.putNumber("Distance to Goal (m)", dist);
-        //SmartDashboard.putNumber("Distance to Goal (in)", dist*39.37);
     
         double angle = Math.atan2(robotToGoal.getY(),robotToGoal.getX());
 
@@ -115,7 +114,7 @@ public class Turret extends PIDSubsystem {
    //When the Limelight has a valid solution , use the limelight tx() angle and add it to the current turret postiion to 
     //determine the updated setpoint for the turret
      if (m_trackTarget && Limelight.valid()) {
-        angle = getMeasurement() - Limelight.tx();
+        angle = getMeasurement() + Limelight.tx();
       } 
 
       m_desiredAngle = angle;
@@ -130,9 +129,10 @@ public class Turret extends PIDSubsystem {
       else if (angle > TurretConstants.kTurretHigh) {
         angle = TurretConstants.kTurretHigh;
       } 
-      else{
-        setSetpoint(angle);
-      }
+      
+      double neoRevs = angle*58.1818181/(2*Math.PI); 
+
+      m_controller.setReference(neoRevs, ControlType.kSmartMotion);
 
     }
      /** 
@@ -158,25 +158,9 @@ public class Turret extends PIDSubsystem {
     }
   }
 
-    @Override
-    protected void useOutput(double output, double setpoint) {
-        if(getMeasurement()>TurretConstants.kTurretHigh && output>0){
-            m_motor.set(-0.2);
-        }
-        else if(getMeasurement()<TurretConstants.kTurretLow && output<0){
-            m_motor.set(0.2);
-        }
-        else{
-            m_motor.set(output);
-        }
-    }
 
     public void stop(){
       m_motor.stopMotor();
-    }
-
-    public boolean atSetpoint(){
-        return m_controller.atSetpoint();
     }
 
     public boolean atDesiredAngle(){
@@ -188,7 +172,15 @@ public class Turret extends PIDSubsystem {
     }
 
     public void climbMode(){
-        setSetpoint(Math.PI);
+        m_controller.setReference(29.0909091, ControlType.kSmartMotion);
+    }
+
+    public void disable() {
+      m_controller.setReference(29.0909091, ControlType.kSmartMotion);
+    }
+
+    public void enable() {
+      m_controller.setReference(29.0909091, ControlType.kSmartMotion);
     }
 
 }
