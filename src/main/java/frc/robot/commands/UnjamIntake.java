@@ -14,7 +14,7 @@ public class UnjamIntake extends CommandBase {
 
     @Override
     public void initialize(){
-        m_intake.extend();
+        //m_intake.retract();
     }
 
     @Override
@@ -28,6 +28,6 @@ public class UnjamIntake extends CommandBase {
     public void end(boolean interrupted) {
         SmartDashboard.putBoolean(m_intake.getID() + " Running", false);
         m_intake.stop();
-        m_intake.retract();
+        //m_intake.retract();
     }
 }

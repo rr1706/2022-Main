@@ -72,7 +72,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Intake " + m_ID + " Current", getCurrent());
         SmartDashboard.putNumber("Intake " + m_ID + " RPM", m_encoder.getVelocity());
-
+        //SmartDashboard.putNumber("Intake " + m_ID + " Temp", m_motor.getMotorTemperature());
     }
 
 }

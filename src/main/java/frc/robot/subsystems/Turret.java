@@ -22,7 +22,7 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.Utilities.MathUtils;
 
 public class Turret extends PIDSubsystem {
-    private final AnalogPotentiometer m_encoder = new AnalogPotentiometer(4, 2*Math.PI*1.011*1.0149, -0.007636);
+    private final AnalogPotentiometer m_encoder = new AnalogPotentiometer(4, 2*Math.PI, 0.0479);
     private final CANSparkMax m_motor = new CANSparkMax(14, MotorType.kBrushed);
     private boolean m_trackTarget = false;
     private double m_desiredAngle = 0.0;
@@ -42,7 +42,7 @@ public class Turret extends PIDSubsystem {
     }
 
     public double getMeasurement(){
-        double angle = MathUtils.toUnitCircAngle(-1.0*m_encoder.get()+0.1544-0.0764+0.021);
+        double angle = MathUtils.toUnitCircAngle(-1.0*m_encoder.get());
        // SmartDashboard.putNumber("Turret Encoder", angle);
         return angle;
     }

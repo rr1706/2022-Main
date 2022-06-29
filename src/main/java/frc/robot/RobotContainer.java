@@ -175,8 +175,8 @@ public class RobotContainer {
 
     new JoystickAnalogButton(m_operatorController, Side.kRight).whenPressed(m_moveFeed).whenReleased(()->m_moveFeed.stop());
 
-    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(m_unjamRight);
-    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(m_unjamLeft);
+    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(m_unjamRight.alongWith(m_unjamLeft));
+    //new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(m_unjamLeft);
 
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(m_feedShooter).whenReleased(()->m_feedShooter.stop());
