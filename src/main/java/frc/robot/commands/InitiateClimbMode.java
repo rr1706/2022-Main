@@ -25,8 +25,8 @@ public class InitiateClimbMode extends CommandBase {
     private final Elevator m_lowElevator;
     private final Drivetrain m_drive; 
     private final XboxController m_controller;   
-    private final SlewRateLimiter m_slewX = new SlewRateLimiter(1.25);
-    private final SlewRateLimiter m_slewY = new SlewRateLimiter(1.25);
+    private final SlewRateLimiter m_slewX = new SlewRateLimiter(1.45);
+    private final SlewRateLimiter m_slewY = new SlewRateLimiter(1.45);
    private boolean m_climbModeReady = false;
 
     public InitiateClimbMode(Shooter shooter, ShooterHood hood, Turret turret, Intake left, Intake right, 
@@ -59,6 +59,7 @@ public class InitiateClimbMode extends CommandBase {
         m_highElevator.stop();
         m_climber.extend();
         m_climber.changeConstraints(new Constraints(100, 250));
+        m_climbModeReady = false;
     }
 
       /**
@@ -86,7 +87,6 @@ public class InitiateClimbMode extends CommandBase {
 
   @Override
   public void end(boolean interrupted){
-    m_climbModeReady = false;
     m_turret.disable();
     m_turret.stop();
     m_climber.setDesiredPose(2.0);

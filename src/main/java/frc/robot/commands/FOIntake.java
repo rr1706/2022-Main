@@ -15,8 +15,7 @@ public class FOIntake extends CommandBase {
     private final Timer m_timer = new Timer();
     private boolean m_side = false;
     private boolean m_forceRO = false;
-    private double m_ballTime = 0.00;
-    private boolean m_ballDetected = false;
+
     public FOIntake(Intake right, Intake left, boolean side, Drivetrain drive){
         m_leftIntake = left;
         m_rightIntake = right;
@@ -99,8 +98,6 @@ public class FOIntake extends CommandBase {
         SmartDashboard.putBoolean(m_intake.getID() + " Running", false);
         m_intake.retract();
         m_timer.stop();
-        m_ballDetected = false;
-        m_ballTime = 0.0;
     }
 
     public void toggleRO(){
