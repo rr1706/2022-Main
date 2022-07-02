@@ -19,12 +19,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Climber extends SubsystemBase {
 
-    private double m_pose = 2.0;
+    private double m_pose = 1.0;
     private final CANSparkMax m_motor1 = new CANSparkMax(ClimberConstants.kMotorID[0], MotorType.kBrushless);
     private final CANSparkMax m_motor2 = new CANSparkMax(ClimberConstants.kMotorID[1], MotorType.kBrushless);
     private final RelativeEncoder m_encoder = m_motor1.getEncoder();
-    private final DoubleSolenoid m_valve = new DoubleSolenoid(GlobalConstants.PCHID,PneumaticsModuleType.REVPH, ClimberConstants.kValvePorts[0], ClimberConstants.kValvePorts[1]);
-    private final ProfiledPIDController m_PID = new ProfiledPIDController(0.25, 0, 0, new Constraints(50, 25));
+    private final DoubleSolenoid m_valve = new DoubleSolenoid(GlobalConstants.PCHID, PneumaticsModuleType.REVPH,
+            ClimberConstants.kValvePorts[0], ClimberConstants.kValvePorts[1]);
+    private final ProfiledPIDController m_PID = new ProfiledPIDController(ClimberConstants.kPID[0],
+            ClimberConstants.kPID[1], ClimberConstants.kPID[2], ClimberConstants.kDefaultConstraints);
     private final DigitalInput m_limit = new DigitalInput(0);
 
     public Climber() {
@@ -33,19 +35,16 @@ public class Climber extends SubsystemBase {
         m_motor1.enableVoltageCompensation(GlobalConstants.kVoltCompensation);
         m_motor1.setInverted(true);
         m_motor2.follow(m_motor1, true);
-       
+
         m_motor1.setIdleMode(IdleMode.kBrake);
         m_motor2.setIdleMode(IdleMode.kBrake);
 
         m_motor1.burnFlash();
         m_motor2.burnFlash();
 
-        //m_PID.setTolerance(1.0);
-        //SmartDashboard.putNumber("Set Climber Pose", 0.0);
-
     }
 
-    public void changeConstraints(Constraints newConstraints){
+    public void changeConstraints(Constraints newConstraints) {
         m_PID.setConstraints(newConstraints);
     }
 
@@ -63,20 +62,19 @@ public class Climber extends SubsystemBase {
         m_pose = pose;
     }
 
-    public void setPower(double power){
+    public void setPower(double power) {
         m_motor1.set(power);
     }
 
-    public void setPoseRef(double pose){
+    public void setPoseRef(double pose) {
         m_encoder.setPosition(pose);
     }
 
-    public void run(){
-        if(m_pose<-10.0){
-            m_pose = -10.0;
-        }
-        else if(m_pose>82){
-            m_pose = 82;
+    public void run() {
+        if (m_pose < ClimberConstants.kMinPose) {
+            m_pose = ClimberConstants.kMinPose;
+        } else if (m_pose > ClimberConstants.kMaxPose) {
+            m_pose = ClimberConstants.kMaxPose;
         }
         m_motor1.set(m_PID.calculate(m_encoder.getPosition(), m_pose));
     }
@@ -84,22 +82,14 @@ public class Climber extends SubsystemBase {
     @Override
     public void periodic() {
         double pose = m_encoder.getPosition();
-        //double speed = m_encoder.getVelocity();
-        //SmartDashboard.putBoolean("Running Climber", false);
-        //m_pose = SmartDashboard.getNumber("Set Climber Pose", 0.0);
+
         SmartDashboard.putNumber("Climber Pose", pose);
-        //SmartDashboard.putNumber("Climber Speed", speed);
-        //SmartDashboard.putNumber("Climber Desried Pose", m_pose);
         SmartDashboard.putNumber("Climber Current", getCurrent());
         SmartDashboard.putBoolean("Climber Limit", getLimit());
-        //SmartDashboard.putNumber("Current 2", m_motor2.getOutputCurrent());
-
-        //SmartDashboard.putNumber("Motor 1 Temp", m_motor1.getMotorTemperature());
-       // SmartDashboard.putNumber("Motor 2 Temp", m_motor2.getMotorTemperature());
 
     }
 
-    public double getPose(){
+    public double getPose() {
         return m_encoder.getPosition();
     }
 
@@ -108,15 +98,15 @@ public class Climber extends SubsystemBase {
         m_motor2.stopMotor();
     }
 
-    public double getCurrent(){
-        return m_motor1.getOutputCurrent()+m_motor2.getOutputCurrent();
+    public double getCurrent() {
+        return m_motor1.getOutputCurrent() + m_motor2.getOutputCurrent();
     }
 
-    public boolean atSetpoint(){
-        return Math.abs(m_pose-getPose())<1.0;
+    public boolean atSetpoint() {
+        return Math.abs(m_pose - getPose()) < 1.0;
     }
 
-    public boolean getLimit(){
+    public boolean getLimit() {
         return m_limit.get();
     }
 }

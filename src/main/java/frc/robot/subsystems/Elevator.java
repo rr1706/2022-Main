@@ -21,7 +21,7 @@ public class Elevator extends SubsystemBase {
     private final DigitalInput m_sensor;
     private double m_RPM = 10000;
 
-    public Elevator(int motorCANID, int sensorPort, String ID, double rpm){
+    public Elevator(int motorCANID, int sensorPort, String ID, double rpm) {
         m_RPM = rpm;
         m_ID = ID;
         m_sensor = new DigitalInput(sensorPort);
@@ -39,29 +39,34 @@ public class Elevator extends SubsystemBase {
         m_PID.setFF(0.000097);
         m_motor.burnFlash();
 
-        //SmartDashboard.putNumber("Set "+m_ID+" Elevator RPM", m_RPM);
+        // SmartDashboard.putNumber("Set "+m_ID+" Elevator RPM", m_RPM);
 
     }
-    
+
     public void run() {
         m_PID.setReference(m_RPM, ControlType.kVelocity);
     }
-    public void stop(){
+
+    public void stop() {
         m_motor.stopMotor();
     }
-    public double getCurrent(){
-       return m_motor.getOutputCurrent();
+
+    public double getCurrent() {
+        return m_motor.getOutputCurrent();
     }
-    public boolean getSensor(){
+
+    public boolean getSensor() {
         return !m_sensor.get();
     }
 
     @Override
     public void periodic() {
-        //m_RPM = SmartDashboard.getNumber("Set "+m_ID+" Elevator RPM", 10000);
-        //SmartDashboard.putNumber(m_ID+" Elevator Current", m_motor.getOutputCurrent());
-       // SmartDashboard.putNumber(m_ID+" Elevator Motor Temp", m_motor.getMotorTemperature());
-        SmartDashboard.putNumber(m_ID+" Elevator RPM", m_encoder.getVelocity());
-        //SmartDashboard.putBoolean(m_ID+" Indexed Ball", getSensor());
+        // m_RPM = SmartDashboard.getNumber("Set "+m_ID+" Elevator RPM", 10000);
+        // SmartDashboard.putNumber(m_ID+" Elevator Current",
+        // m_motor.getOutputCurrent());
+        // SmartDashboard.putNumber(m_ID+" Elevator Motor Temp",
+        // m_motor.getMotorTemperature());
+        SmartDashboard.putNumber(m_ID + " Elevator RPM", m_encoder.getVelocity());
+        // SmartDashboard.putBoolean(m_ID+" Indexed Ball", getSensor());
     }
 }

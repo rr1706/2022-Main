@@ -13,20 +13,21 @@ import frc.robot.Constants.CurrentLimit;
 import frc.robot.Constants.GlobalConstants;
 import frc.robot.Constants.ShooterConstants;
 
-public class Shooter extends SubsystemBase{
+public class Shooter extends SubsystemBase {
     private final CANSparkMax m_motor1;
     private final CANSparkMax m_motor2;;
     private final RelativeEncoder m_encoder1;
     private final RelativeEncoder m_encoder2;
-    private final PIDController m_PID = new PIDController(0.00005, 0.0003, 0.0);
-    private SimpleMotorFeedforward m_FF = new SimpleMotorFeedforward(0.018, 0.0001635);
-    
-    private double m_RPM = 3000.0;
+    private final PIDController m_PID = new PIDController(ShooterConstants.kPID[0], ShooterConstants.kPID[1],
+            ShooterConstants.kPID[2]);
+    private SimpleMotorFeedforward m_FF = new SimpleMotorFeedforward(ShooterConstants.kStatic, ShooterConstants.kFF);
+
+    private double m_RPM = ShooterConstants.kMaxRPM;
 
     public Shooter(int motorIDs[]) {
 
-        m_motor1 = new CANSparkMax(motorIDs[0],MotorType.kBrushless);
-        m_motor2 = new CANSparkMax(motorIDs[1],MotorType.kBrushless);
+        m_motor1 = new CANSparkMax(motorIDs[0], MotorType.kBrushless);
+        m_motor2 = new CANSparkMax(motorIDs[1], MotorType.kBrushless);
         m_encoder1 = m_motor1.getEncoder();
         m_encoder2 = m_motor2.getEncoder();
 
@@ -38,42 +39,33 @@ public class Shooter extends SubsystemBase{
         m_motor2.setIdleMode(IdleMode.kCoast);
 
         m_motor1.setInverted(false);
-        m_motor2.follow(m_motor1,true);
+        m_motor2.follow(m_motor1, true);
 
         m_encoder1.setVelocityConversionFactor(1.0);
 
         m_motor1.burnFlash();
         m_motor2.burnFlash();
 
-        m_PID.setTolerance(ShooterConstants.kShotRPMTolerance);
-        m_PID.setIntegratorRange(-0.015, 0.015);
-
-        //SmartDashboard.putNumber("SetShotRPM", m_RPM);
-       // SmartDashboard.putBoolean("Shooter PID Reset", false);
-        //SmartDashboard.putNumber("Shooter P", m_PID.getP());
-        //SmartDashboard.putNumber("Shooter I", m_PID.getI());
-        //SmartDashboard.putNumber("Shooter FF", m_FF.kv);
-        //SmartDashboard.putNumber("Shooter Static", m_FF.ks);
-        //SmartDashboard.putNumber("Shooter Max I Power", 0.02);
+        m_PID.setTolerance(ShooterConstants.kRPMTolerance);
+        m_PID.setIntegratorRange(-ShooterConstants.kIntRange, ShooterConstants.kIntRange);
 
     }
 
     public void run(double rpm) {
-        if(rpm>=4000){
-            rpm = 4000;
+        if (rpm >= ShooterConstants.kMaxRPM) {
+            rpm = ShooterConstants.kMaxRPM;
         }
         m_RPM = rpm;
         double outputPID = m_PID.calculate(m_encoder1.getVelocity(), m_RPM);
         double outputFF = m_FF.calculate(m_RPM);
-        double output = outputPID+outputFF;
+        double output = outputPID + outputFF;
 
-        if(output <= -0.25){
-            output = -0.25;
+        if (output <= ShooterConstants.kMaxDecel) {
+            output = ShooterConstants.kMaxDecel;
         }
 
-        m_motor1.set(outputPID+outputFF);
+        m_motor1.set(outputPID + outputFF);
     }
-
 
     public void stop() {
         m_motor1.stopMotor();
@@ -83,29 +75,11 @@ public class Shooter extends SubsystemBase{
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter RPM", m_encoder1.getVelocity());
-       // SmartDashboard.putNumber("Shooter RPM2", m_encoder2.getVelocity());
-        //SmartDashboard.putNumber("Shooter Current", m_motor1.getOutputCurrent()+m_motor2.getOutputCurrent());
-        //m_RPM = SmartDashboard.getNumber("SetShotRPM", 3000.0);
-
-/* 
-        if(SmartDashboard.getBoolean("Shooter PID Reset", false)){
-            double kv = SmartDashboard.getNumber("Shooter FF", 0.00016);
-            double ks = SmartDashboard.getNumber("Shooter Static", 0.02);
-            double integratePower = SmartDashboard.getNumber("Shooter Max I Power", 0.02);
-            m_PID.setP(SmartDashboard.getNumber("Shooter P", 0.0001));
-            m_PID.setI(SmartDashboard.getNumber("Shooter I", 0.0001));
-            m_PID.setIntegratorRange(-integratePower, integratePower);
-            m_FF = new SimpleMotorFeedforward(ks, kv);
-            SmartDashboard.putBoolean("Shooter PID Reset", false);
-        } */
-
-
-
 
     }
 
     public boolean atSetpoint() {
         return m_PID.atSetpoint();
     }
-    
+
 }
