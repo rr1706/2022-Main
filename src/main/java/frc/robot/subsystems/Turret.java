@@ -28,19 +28,20 @@ public class Turret extends SubsystemBase {
     private double m_desiredAngle = 0.0;
 
     public Turret(){
-        m_controller.setP(0.00005,0);
-        m_controller.setFF(0.000175,0);
-        m_controller.setSmartMotionMaxAccel(20000.0,0);
+        m_controller.setP(0.00000,0);
+        m_controller.setFF(0.00017,0);
+        m_controller.setSmartMotionMaxAccel(15000.0,0);
         m_controller.setSmartMotionMaxVelocity(5000.0, 0);
+        m_controller.setSmartMotionAllowedClosedLoopError(0.2, 0);
         m_motor.setIdleMode(IdleMode.kBrake);
-        m_motor.setInverted(false);
+        m_motor.setInverted(true);
         m_motor.setSoftLimit(SoftLimitDirection.kForward, (float)55.7575757);
         m_motor.setSoftLimit(SoftLimitDirection.kReverse,  (float)2.4242424);
         m_motor.setSmartCurrentLimit(CurrentLimit.kTurret);
         m_motor.enableVoltageCompensation(GlobalConstants.kVoltCompensation);
+        m_encoder.setPosition(29.090909);
         m_motor.burnFlash();
 
-        m_encoder.setPosition(29.090909);
         SmartDashboard.putBoolean("EnableLimelight", false);
     }
 
@@ -49,11 +50,11 @@ public class Turret extends SubsystemBase {
         return angle;
     }
 
-/*     @Override 
+    @Override 
     public void periodic(){
-      SmartDashboard.putNumber("Turret Setpoint", m_controller.getSetpoint());
+      SmartDashboard.putNumber("Turret Location", getMeasurement());
 
-    } */
+    } 
 
     public void aimAtGoal(Pose2d robotPose, Translation2d goal, boolean aimAtVision){
       Translation2d robotToGoal = goal.minus(robotPose.getTranslation());
@@ -72,7 +73,7 @@ public class Turret extends SubsystemBase {
 
 
       if (aimAtVision && Limelight.valid()) {
-        angle = getMeasurement() + Limelight.tx();
+        angle = getMeasurement() - Limelight.tx();
       } 
 
       m_desiredAngle = angle;
@@ -114,7 +115,7 @@ public class Turret extends SubsystemBase {
    //When the Limelight has a valid solution , use the limelight tx() angle and add it to the current turret postiion to 
     //determine the updated setpoint for the turret
      if (m_trackTarget && Limelight.valid()) {
-        angle = getMeasurement() + Limelight.tx();
+        angle = getMeasurement() - Limelight.tx();
       } 
 
       m_desiredAngle = angle;
