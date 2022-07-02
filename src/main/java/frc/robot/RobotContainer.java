@@ -79,9 +79,9 @@ public class RobotContainer {
       "Right");
 
   private final Elevator m_lowElevator = new Elevator(ElevatorConstants.kLowMotorID, ElevatorConstants.kLowSensor,
-      "Low", 10000.0);
+      "Low");
   private final Elevator m_highElevator = new Elevator(ElevatorConstants.kHighMotorID, ElevatorConstants.kHighSensor,
-      "High", 10000.0);
+      "High");
 
   private final Climber m_climber = new Climber();
 

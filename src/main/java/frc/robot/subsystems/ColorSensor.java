@@ -10,20 +10,18 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ColorConstants;
 
 public class ColorSensor extends SubsystemBase {
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(I2C.Port.kMXP);
     private final ColorMatch m_colorMatcher = new ColorMatch();
-    private final Color kBlueTarget = new Color(0.215, 0.434, 0.350);
-    private final Color kRedTarget = new Color(0.335, 0.421, 0.242);
-    private final Color kNoTarget = new Color(0.256, 0.457, 0.287);
 
     private ColorMatchResult m_match;
 
     public ColorSensor() {
-        m_colorMatcher.addColorMatch(kBlueTarget);
-        m_colorMatcher.addColorMatch(kRedTarget);
-        m_colorMatcher.addColorMatch(kNoTarget);
+        m_colorMatcher.addColorMatch(ColorConstants.kBlueTarget);
+        m_colorMatcher.addColorMatch(ColorConstants.kRedTarget);
+        m_colorMatcher.addColorMatch(ColorConstants.kNoTarget);
 
     }
 
@@ -49,11 +47,11 @@ public class ColorSensor extends SubsystemBase {
         SmartDashboard.putNumber("Confidence", m_match.confidence);
         SmartDashboard.putNumber("Prox", m_colorSensor.getProximity());
 
-        if (m_match.color == kRedTarget) {
+        if (m_match.color == ColorConstants.kRedTarget) {
             SmartDashboard.putString("Detected Color", "Red");
-        } else if (m_match.color == kBlueTarget) {
+        } else if (m_match.color == ColorConstants.kBlueTarget) {
             SmartDashboard.putString("Detected Color", "Blue");
-        } else if (m_match.color == kNoTarget) {
+        } else if (m_match.color == ColorConstants.kNoTarget) {
             SmartDashboard.putString("Detected Color", "Neither");
         }
 
@@ -61,8 +59,8 @@ public class ColorSensor extends SubsystemBase {
 
     public boolean isWrongBall() {
         boolean prox = m_colorSensor.getProximity() >= 80;
-        boolean red = m_match.color == kRedTarget;
-        boolean blue = m_match.color == kBlueTarget;
+        boolean red = m_match.color == ColorConstants.kRedTarget;
+        boolean blue = m_match.color ==ColorConstants.kBlueTarget;
         if (DriverStation.getAlliance().equals(Alliance.Red) && blue && prox) {
             return true;
         } else if (DriverStation.getAlliance().equals(Alliance.Blue) && red && prox) {

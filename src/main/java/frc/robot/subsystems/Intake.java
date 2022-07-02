@@ -23,7 +23,6 @@ public class Intake extends SubsystemBase {
     private final SparkMaxPIDController m_PID;
     private final DoubleSolenoid m_actuator;
     private final String m_ID;
-    private double m_RPM = 10000;
 
     public Intake(int motorCANID, int[] airChannels, String ID) {
         m_ID = ID;
@@ -44,8 +43,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void run(double rpm) {
-        m_RPM = rpm;
-        m_PID.setReference(m_RPM, ControlType.kVelocity);
+        m_PID.setReference(rpm, ControlType.kVelocity);
     }
 
     public void extend() {

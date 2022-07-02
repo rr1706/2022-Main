@@ -60,8 +60,8 @@ public class Shooter extends SubsystemBase {
         double outputFF = m_FF.calculate(m_RPM);
         double output = outputPID + outputFF;
 
-        if (output <= ShooterConstants.kMaxDecel) {
-            output = ShooterConstants.kMaxDecel;
+        if (output <= ShooterConstants.kMaxNegPower) {
+            output = ShooterConstants.kMaxNegPower;
         }
 
         m_motor1.set(outputPID + outputFF);

@@ -20,7 +20,7 @@ public class ZeroHood extends CommandBase {
         m_timer.reset();
         m_timer.start();
         m_finished = false;
-        m_hood.setHood(-0.10);
+        m_hood.setHoodPower(-0.10);
     }
 
     @Override

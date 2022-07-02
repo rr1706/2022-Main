@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Utilities.LinearInterpolationTable;
 
 import java.awt.geom.Point2D;
@@ -213,9 +214,13 @@ public final class Constants {
   public static final class ElevatorConstants {
     public static final int kLowMotorID = 17;
     public static final int kHighMotorID = 16;
-    public static final double[] kPIDF = { 0.000075, 0, 0, 0.000091 };
     public static final int kLowSensor = 10;
     public static final int kHighSensor = 11;
+
+    public static final double kP = 0.0001;
+    public static final double kFF = 0.000097;
+
+    public static final double kSpeed = 10000.0;
   }
 
   public static final class TurretConstants {
@@ -252,6 +257,12 @@ public final class Constants {
     public static final int kMotorID = 11;
     public static final double kHoodTolerance = 5.0;
     public static final double kMaxAngle = 38.0;
+    public static final double kMinAngle = 0.5;
+    public static final double kPosConvFactor = 1.27777777778;
+
+    public static final double kP = 0.20;
+    public static final double kMaxNegPower = -0.33;
+    public static final double kMaxPosPower = 1.0;
   }
 
   public static final class ShooterConstants {
@@ -264,7 +275,7 @@ public final class Constants {
     public static final double kFF = 0.0001635;
     public static final double kAccelCompFactor = 0.100; // in units of seconds
     public static final double kMaxRPM = 4000.0;
-    public static final double kMaxDecel = -0.25;
+    public static final double kMaxNegPower = -0.25;
 
     public static final double kHangarRPM = 1200;
 
@@ -316,6 +327,12 @@ public final class Constants {
     };
 
     public static final LinearInterpolationTable kTimeTable = new LinearInterpolationTable(kShotTimes);
+  }
+
+  public static final class ColorConstants{
+    public static final Color kBlueTarget = new Color(0.215, 0.434, 0.350);
+    public static final Color kRedTarget = new Color(0.335, 0.421, 0.242);
+    public static final Color kNoTarget = new Color(0.256, 0.457, 0.287);
   }
 
   /**
