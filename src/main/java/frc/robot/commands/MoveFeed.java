@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;
@@ -75,14 +74,11 @@ public class MoveFeed extends CommandBase{
         double currentTime = m_timer.get();
         boolean isOmegaLow = Math.abs(m_drive.getFieldRelativeSpeed().omega) < Math.PI/3.0;
         boolean isAlphaLow = Math.abs(m_drive.getFieldRelativeAccel().alpha) <= 1.00;
-        boolean isJerkLow = true;//Math.abs(m_drive.getFieldRelativeJerk().jx) <= 6.00 
-           // && Math.abs(m_drive.getFieldRelativeJerk().jy) <= 6.00
-           // && Math.abs(m_drive.getFieldRelativeJerk().jz) <= 6.00;
         boolean isTurretReady = m_turret.atDesiredAngle();
         boolean isShooterReady = m_shooter.atSetpoint();
         boolean isHoodReady = m_hood.atSetpoint();
 
-        boolean[] array = {isOmegaLow,isAlphaLow,isJerkLow,isTurretReady,isShooterReady,isHoodReady};
+        boolean[] array = {isOmegaLow,isAlphaLow,isTurretReady,isShooterReady,isHoodReady};
 
         SmartDashboard.putBooleanArray("Booleans", array);
 
@@ -99,7 +95,7 @@ public class MoveFeed extends CommandBase{
 
         boolean wrongColor = m_colorSensor.isWrongBall();
 
-        boolean canShoot = isOmegaLow && isAlphaLow && isJerkLow && isTurretReady && isShooterReady && isHoodReady;
+        boolean canShoot = isOmegaLow && isAlphaLow && isTurretReady && isShooterReady && isHoodReady;
             if(canShoot && colorEvaluated && !m_ballShot){
                 m_shotTime = currentTime;
                 m_ballShot = true;

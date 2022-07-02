@@ -95,8 +95,7 @@ public class RobotContainer {
   //private final RunIntake m_runLeftIntake = new RunIntake(m_leftIntake);
   //private final RunIntake m_runRightIntake = new RunIntake(m_rightIntake);
 
-  private final FOIntake m_rightFO = new FOIntake(m_rightIntake, m_leftIntake, true, m_robotDrive);
-  private final FOIntake m_leftFO = new FOIntake(m_rightIntake, m_leftIntake, false, m_robotDrive);
+  private final FOIntake m_runIntakes = new FOIntake(m_rightIntake, m_leftIntake, m_robotDrive);
 
   private final UnjamIntake m_unjamLeft = new UnjamIntake(m_leftIntake);
   private final UnjamIntake m_unjamRight = new UnjamIntake(m_rightIntake);
@@ -156,17 +155,17 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new POVButton(m_driverController, 0)
         .whenPressed(() -> m_robotDrive.resetOdometry(new Rotation2d(0.0)));
-    new POVButton(m_driverController, 180)
-        .whenPressed(() -> m_rightFO.toggleRO()).whenPressed(()->m_leftFO.toggleRO());
-    new JoystickAnalogButton(m_driverController, Side.kRight).whenPressed(m_rightFO)
-      .whenReleased(new InstantCommand(()->m_rightFO.cancel())
+    //new POVButton(m_driverController, 180)
+      //  .whenPressed(() -> m_rightFO.toggleRO()).whenPressed(()->m_leftFO.toggleRO());
+    new JoystickAnalogButton(m_driverController, Side.kRight).whenPressed(m_runIntakes)
+      .whenReleased(new InstantCommand(()->m_runIntakes.cancel())
         .andThen(new WaitCommand(1.0).andThen(()->m_rightIntake.stop()).andThen(()->m_leftIntake.stop()))
-        .withInterrupt(()->m_rightFO.isScheduled()));
-
+        .withInterrupt(()->m_runIntakes.isScheduled()));
+/* 
     new JoystickAnalogButton(m_driverController, Side.kLeft).whenPressed(m_leftFO)
       .whenReleased(new InstantCommand(()->m_leftFO.cancel())
         .andThen(new WaitCommand(1.0).andThen(()->m_leftIntake.stop()).andThen(()->m_rightIntake.stop()))
-        .withInterrupt(()->m_leftFO.isScheduled()));
+        .withInterrupt(()->m_leftFO.isScheduled())); */
     
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(m_runShooter);
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(()->m_runShooter.cancel()).whenPressed(()->m_moveShoot.cancel()).whenPressed(()->m_aimHanger.cancel());
@@ -179,8 +178,9 @@ public class RobotContainer {
     //new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(m_unjamLeft);
 
 
-    new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(m_feedShooter).whenReleased(()->m_feedShooter.stop());
-    new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(m_moveFeed).whenReleased(()->m_moveFeed.stop());
+    //new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(m_feedShooter).whenReleased(()->m_feedShooter.stop());
+    new JoystickAnalogButton(m_driverController, Side.kLeft).whenPressed(m_moveFeed).whenReleased(()->m_moveFeed.stop());
+    //new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(m_moveFeed).whenReleased(()->m_moveFeed.stop());
 
     new POVButton(m_operatorController, 0).whenPressed(m_ZeroHood);
     new POVButton(m_operatorController, 90).whenPressed(m_moveShoot);

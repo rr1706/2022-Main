@@ -10,18 +10,20 @@ import frc.robot.subsystems.Swerve.Drivetrain;
 public class FOIntake extends CommandBase {
     private final Intake m_rightIntake;
     private final Intake m_leftIntake;
-    private Intake m_intake;
     private final Drivetrain m_drive;
     private final Timer m_timer = new Timer();
-    private boolean m_side = false;
     private boolean m_forceRO = false;
-    private double m_ballTime = 0.00;
-    private boolean m_ballDetected = false;
-    public FOIntake(Intake right, Intake left, boolean side, Drivetrain drive){
+    private boolean m_rightRunning = false;
+    private boolean m_leftRunning = false;
+    private double m_leftStopTime = 0.0;
+    private double m_rightStopTime = 0.0;
+    private double yVelAve = 0.0;
+
+
+    public FOIntake(Intake right, Intake left, Drivetrain drive){
         m_leftIntake = left;
         m_rightIntake = right;
         m_drive = drive;
-        m_side = side;
         addRequirements(left,right);
     }
 
@@ -29,78 +31,76 @@ public class FOIntake extends CommandBase {
     public void initialize(){
         m_timer.reset();
         m_timer.start();
-        double angle = MathUtils.toUnitCircAngle(m_drive.getGyro().getRadians());
-        double xVel = m_drive.getFieldRelativeSpeed().vx;
-        if((angle >= 2*Math.PI/6 && angle < 4*Math.PI/6)){
-            if(xVel >= 0.0){
-                m_intake = m_rightIntake;
-            }
-            else{
-                m_intake = m_leftIntake;
-            }
+        double yVel = m_drive.getChassisSpeed().vyMetersPerSecond;
+
+        if(yVel > 0.05){
+            m_leftIntake.extend();
+            m_leftIntake.run(11000);
+            m_leftRunning = true;
         }
-        else if((angle >=8*Math.PI/6 && angle < 10*Math.PI/6)){
-            if(xVel < 0.0){
-                m_intake = m_rightIntake;
-            }
-            else{
-                m_intake = m_leftIntake;
-            }
+        else if(yVel < -0.05){
+            m_rightIntake.extend();
+            m_rightIntake.run(11000);
+            m_rightRunning = true;
         }
-        else if(angle>=((3*Math.PI)/2)||angle<=Math.PI/2 ){
-            if(m_side){
-                m_intake = m_rightIntake;
-            }else{
-                m_intake = m_leftIntake;
-            }
-        }else{
-            if(!m_side){
-                m_intake = m_rightIntake;
-            }else{
-                m_intake = m_leftIntake;
-            }
-        }
-        if(m_forceRO){
-            if(m_side){
-                m_intake = m_rightIntake;
-            }
-            else{
-                m_intake = m_leftIntake;
-            }
-        }
-        m_intake.extend();
         
     }
 
     @Override
     public void execute(){
-        SmartDashboard.putBoolean(m_intake.getID() + " Running", true);
         final double currentTime = m_timer.get();
-/*         if(m_intake.getCurrent()>12.5 && currentTime>0.250 && !m_ballDetected)
-        {
-            m_ballTime = currentTime;
-            m_ballDetected = true;
-            m_intake.run(11000);
+        double yVel = m_drive.getChassisSpeed().vyMetersPerSecond;
+        yVelAve = (4*yVelAve+yVel)/3.0;
+
+        if(yVelAve > 0.5){
+            yVelAve = 0.5;
         }
-        else if(!m_ballDetected){
-            m_intake.run(11000);
+        else if(yVelAve < -0.5){
+            yVelAve = -0.5;
         }
-        else if(m_ballDetected && Math.abs(m_ballTime-currentTime)>0.50){
-            m_ballDetected = false;
-            m_ballTime = 0.0;
-            m_timer.reset();
-        } */
-        m_intake.run(11000);
+
+        if(yVelAve < -0.20 ){
+            if(m_leftRunning){
+                m_leftIntake.retract();
+                m_leftRunning = false;
+                m_leftStopTime = currentTime;
+            }
+
+            m_rightRunning = true;
+            m_rightIntake.extend();
+            m_rightIntake.run(11000);
+        }
+        else if(yVelAve > 0.20){
+            if(m_rightRunning){
+                m_rightIntake.retract();
+                m_rightRunning = false;
+                m_rightStopTime = currentTime;
+            }
+            m_leftRunning = true;
+            m_leftIntake.extend();
+            m_leftIntake.run(11000);
+        }
+
+        if(!m_leftRunning && currentTime > m_leftStopTime + 0.80){
+            m_leftIntake.stop();
+        }
+
+        if(!m_rightRunning && currentTime > m_rightStopTime + 0.80){
+            m_rightIntake.stop();
+        }
 
     }
 
     @Override
     public void end(boolean interrupted) {
-        SmartDashboard.putBoolean(m_intake.getID() + " Running", false);
-        m_intake.retract();
+        m_rightRunning = false;
+        m_leftRunning = false;
+        m_leftStopTime = 0.0;
+        m_rightStopTime = 0.0;
+        m_leftIntake.retract();
+        m_rightIntake.retract();
+        yVelAve = 0.0;        
         m_timer.stop();
-        m_ballDetected = false;
-        m_ballTime = 0.0;
     }
 
     public void toggleRO(){
