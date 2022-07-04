@@ -5,6 +5,7 @@ import java.lang.String;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -29,16 +30,20 @@ public class AutoFromPathPlanner extends SequentialCommandGroup {
         new PIDController(AutoConstants.kPXController, 0, 0), new PIDController(AutoConstants.kPYController, 0, 0),
         thetaController, drive::setModuleStates, drive);
 
+    addRequirements(drive);
+
     if(endStationary){
     // Run path following command, then stop at the end.
       addCommands(
-          swerveControllerCommand,
+         new InstantCommand(() -> SmartDashboard.putString("AutoPath", pathName)),
+          swerveControllerCommand, 
           new InstantCommand(() -> drive.stop()));
     }
     else{
           // Run path following command, robot will continue moving at same swerve module commanded state at the end 
           // (NEXT COMMAND IN AUTO MUST BE MOVEMENT OR ELSE ROBOT MAY CONTINUE MOVING UNCONTROLLABLY)
-          addCommands(swerveControllerCommand);
+          addCommands(new InstantCommand(() -> SmartDashboard.putString("AutoPath", pathName)),
+          swerveControllerCommand);
     }
 
 

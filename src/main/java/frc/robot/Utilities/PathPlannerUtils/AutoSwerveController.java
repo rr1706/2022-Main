@@ -3,6 +3,7 @@ package frc.robot.Utilities.PathPlannerUtils;
 import static edu.wpi.first.wpilibj.util.ErrorMessages.requireNonNullParam;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -86,7 +87,7 @@ public class AutoSwerveController extends CommandBase {
         requireNonNullParam(yController, "xController", "SwerveControllerCommand"),
         requireNonNullParam(thetaController, "thetaController", "SwerveControllerCommand"));
 
-    m_controller.setTolerance(new Pose2d(0.25, 0.25, new Rotation2d(0.10)));
+    m_controller.setTolerance(new Pose2d(0.3, 0.3, new Rotation2d(0.15)));
 
     m_outputModuleStates = requireNonNullParam(outputModuleStates, "frontLeftOutput", "SwerveControllerCommand");
 
@@ -157,8 +158,15 @@ public class AutoSwerveController extends CommandBase {
     double curTime = m_timer.get();
     PathPlannerState desiredState = m_trajectory.sample(curTime);
 
+
+    SmartDashboard.putNumber("Desired Auto Vel", desiredState.velocityMetersPerSecond);
+
     var targetChassisSpeeds = m_controller.calculate(m_pose.get(), desiredState, desiredState.holonomicRotation);
     var targetModuleStates = m_kinematics.toSwerveModuleStates(targetChassisSpeeds);
+
+    SmartDashboard.putNumber("Auto Target Vx", targetChassisSpeeds.vxMetersPerSecond);
+    SmartDashboard.putNumber("Auto Target Vy", targetChassisSpeeds.vyMetersPerSecond);
+
 
     m_outputModuleStates.accept(targetModuleStates);
   }

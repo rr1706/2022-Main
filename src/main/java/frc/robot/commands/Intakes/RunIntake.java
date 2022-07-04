@@ -20,13 +20,13 @@ public class RunIntake extends CommandBase {
 
     @Override
     public void execute() {
-        SmartDashboard.putBoolean(m_intake.getID() + " Running", true);
+        //SmartDashboard.putBoolean(m_intake.getID() + " Running", true);
         m_intake.run(IntakeConstants.kSpeed);
     }
 
     @Override
     public void end(boolean interrupted) {
-        SmartDashboard.putBoolean(m_intake.getID() + " Running", false);
+        //SmartDashboard.putBoolean(m_intake.getID() + " Running", false);
         m_intake.retract();
     }
 }

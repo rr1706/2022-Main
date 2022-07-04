@@ -83,8 +83,8 @@ public class SmartIntake extends CommandBase {
             m_rightIntake.stop();
         }
 
-        SmartDashboard.putBoolean(m_leftIntake.getID() + " Running", m_leftRunning);
-        SmartDashboard.putBoolean(m_rightIntake.getID() + " Running", m_rightRunning);
+       // SmartDashboard.putBoolean(m_leftIntake.getID() + " Running", m_leftRunning);
+        //SmartDashboard.putBoolean(m_rightIntake.getID() + " Running", m_rightRunning);
 
     }
 
@@ -92,8 +92,8 @@ public class SmartIntake extends CommandBase {
     public void end(boolean interrupted) {
         m_rightRunning = false;
         m_leftRunning = false;
-        SmartDashboard.putBoolean(m_leftIntake.getID() + " Running", false);
-        SmartDashboard.putBoolean(m_rightIntake.getID() + " Running", false);
+        //SmartDashboard.putBoolean(m_leftIntake.getID() + " Running", false);
+        //SmartDashboard.putBoolean(m_rightIntake.getID() + " Running", false);
         m_leftStopTime = 0.0;
         m_rightStopTime = 0.0;
         m_leftIntake.retract();

@@ -1,13 +1,16 @@
 package frc.robot.commands.Elevator;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.GoalConstants;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterHood;
 import frc.robot.subsystems.Turret;
@@ -26,6 +29,7 @@ public class SmartFeed extends CommandBase {
     private boolean m_ballInThroat = false;
     private double m_shotTime = Double.NEGATIVE_INFINITY;
     private double m_throatTime = Double.NEGATIVE_INFINITY;
+    private double m_shotDistLimiter = 240;
 
     public SmartFeed(Turret turret, Elevator top, Elevator bottom, Drivetrain drive, Shooter shooter, ShooterHood hood,
             XboxController operator) {
@@ -39,8 +43,19 @@ public class SmartFeed extends CommandBase {
         addRequirements(top, bottom);
     }
 
+    public SmartFeed(Turret turret, Elevator top, Elevator bottom, Drivetrain drive, Shooter shooter, ShooterHood hood, ColorSensor color) {
+m_turret = turret;
+m_top = top;
+m_bottom = bottom;
+m_drive = drive;
+m_shooter = shooter;
+m_hood = hood;
+m_operator = new XboxController(3);
+addRequirements(top, bottom);
+}
+
     public SmartFeed(Turret turret, Elevator top, Elevator bottom, Drivetrain drive, Shooter shooter, ShooterHood hood,
-            ColorSensor color) {
+            ColorSensor color, double shotDistLimiter) {
         m_turret = turret;
         m_top = top;
         m_bottom = bottom;
@@ -48,6 +63,7 @@ public class SmartFeed extends CommandBase {
         m_shooter = shooter;
         m_hood = hood;
         m_operator = new XboxController(3);
+        m_shotDistLimiter = shotDistLimiter;
         addRequirements(top, bottom);
     }
 
@@ -75,6 +91,10 @@ public class SmartFeed extends CommandBase {
         boolean isShooterReady = m_shooter.atSetpoint();
         boolean isHoodReady = m_hood.atSetpoint();
 
+        Translation2d robotToGoal = GoalConstants.kGoalLocation.minus(m_drive.getPose().getTranslation());
+        double dist = robotToGoal.getDistance(new Translation2d()) * 39.37;
+        boolean isClose = dist < m_shotDistLimiter;
+
         boolean[] array = { isOmegaLow, isAlphaLow, isTurretReady, isShooterReady, isHoodReady };
 
         SmartDashboard.putBooleanArray("Booleans", array);
@@ -90,7 +110,7 @@ public class SmartFeed extends CommandBase {
         SmartDashboard.putBoolean("ball in throat", m_ballInThroat);
         SmartDashboard.putBoolean("ball shot", m_ballShot);
 
-        boolean canShoot = isOmegaLow && isAlphaLow && isTurretReady && isShooterReady && isHoodReady;
+        boolean canShoot = isOmegaLow && isAlphaLow && isTurretReady && isShooterReady && isHoodReady && isClose;
         if (canShoot && colorEvaluated && !m_ballShot) {
             m_shotTime = currentTime;
             m_ballShot = true;

@@ -287,8 +287,8 @@ public final class Constants {
         new Point2D.Double(90, 15.5), //
         new Point2D.Double(105, 18.4), //
         new Point2D.Double(120, 23.0), //
-        new Point2D.Double(135, 26.0), //
-        new Point2D.Double(150, 28.0), //
+        new Point2D.Double(135, 26.5), //
+        new Point2D.Double(150, 29.0), //
         new Point2D.Double(165, 30.5), //
         new Point2D.Double(180, 32.0), //
         new Point2D.Double(195, 36.0), //
@@ -305,8 +305,8 @@ public final class Constants {
         new Point2D.Double(90, 2460), //
         new Point2D.Double(105, 2515), //
         new Point2D.Double(120, 2620), //
-        new Point2D.Double(135, 2715), //
-        new Point2D.Double(150, 2815), //
+        new Point2D.Double(135, 2720), //
+        new Point2D.Double(150, 2825), //
         new Point2D.Double(165, 2900), //
         new Point2D.Double(180, 3050), //
         new Point2D.Double(195, 3195), //

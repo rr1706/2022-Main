@@ -1,5 +1,7 @@
 package frc.robot.commands.Autos;
 
+import java.beans.IndexedPropertyChangeEvent;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -32,15 +34,11 @@ public class FivePlusSweep extends SequentialCommandGroup {
         m_left = leftIntake;
         m_right = rightIntake;
 
-        final AutoFromPathPlanner move1 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move1", 2.5, false);
-        final AutoFromPathPlanner move2 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move2", 2.0, false);
-        final AutoFromPathPlanner move3 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move3", 1.0, false);
-        final AutoFromPathPlanner move4 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move4", 3.2, true);
-        final AutoFromPathPlanner move5 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move5", 3.2, false);
-        final AutoFromPathPlanner move6 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move6", 1.5, true);
+        final AutoFromPathPlanner move1 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move1", 1.4, true);
+        final AutoFromPathPlanner move2 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move2", 1.8, true);
 
-        final SmartFeed m_autoFeed = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color);
-        final SmartFeed m_autoFeed2 = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color);
+        final SmartFeed m_autoFeed = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color, 190.0);
+        final SmartFeed m_autoFeed2 = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color, 190.0);
 
         addCommands(
 
@@ -49,12 +47,10 @@ public class FivePlusSweep extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new SmartShooter(shooter, turret, drivetrain, hood, true, color),
                         new SequentialCommandGroup(
-                                move1.raceWith(new RunIntake(leftIntake), new IndexElevator(top, bottom)),
-                                new ParallelRaceGroup(move2.andThen(move3), new RunIntake(leftIntake), m_autoFeed), 
-                                move4.andThen(new WaitCommand(0.5)).raceWith(new RunIntake(leftIntake),new IndexElevator(top, bottom)),
+                                move1.andThen( new WaitCommand(0.5) ).raceWith(new RunIntake(leftIntake), new WaitCommand(2.25).raceWith(new IndexElevator(top, bottom)).andThen(m_autoFeed)),
                                 new InstantCommand(() -> leftIntake.stop()),
-                                new ParallelRaceGroup(move5.andThen(move6).andThen(
-                                        new WaitCommand(10.0)), new RunIntake(rightIntake), m_autoFeed2))));
+                                move2.andThen( new WaitCommand(10.0)).raceWith(new RunIntake(rightIntake),m_autoFeed2)
+                                )));
     }
 
         @Override

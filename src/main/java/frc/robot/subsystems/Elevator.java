@@ -55,6 +55,6 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber(m_ID + " Elevator RPM", m_encoder.getVelocity());
+       // SmartDashboard.putNumber(m_ID + " Elevator RPM", m_encoder.getVelocity());
     }
 }

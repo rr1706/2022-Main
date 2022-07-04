@@ -68,7 +68,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Intake " + m_ID + " RPM", m_encoder.getVelocity());
+        //SmartDashboard.putNumber("Intake " + m_ID + " RPM", m_encoder.getVelocity());
     }
 
 }
