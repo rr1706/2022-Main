@@ -28,10 +28,10 @@ public class AutoHangarOne extends SequentialCommandGroup {
 
         m_drive = drivetrain;
 
-        final AutoFromPathPlanner DefensivePt1 = new AutoFromPathPlanner(drivetrain, "20222BallAuto-uno", 3.2);
-        final AutoFromPathPlanner DefensivePt2 = new AutoFromPathPlanner(drivetrain, "20222BallAuto-dos", 3.2);
-        final AutoFromPathPlanner DefensivePt3 = new AutoFromPathPlanner(drivetrain, "20222BallPlus1-tres", 3.2);
-        final AutoFromPathPlanner DefensivePt4 = new AutoFromPathPlanner(drivetrain, "20222BallPlus1-quatro", 3.2);
+        final AutoFromPathPlanner DefensivePt1 = new AutoFromPathPlanner(drivetrain, "20222BallAuto-uno", 3.2, true);
+        final AutoFromPathPlanner DefensivePt2 = new AutoFromPathPlanner(drivetrain, "20222BallAuto-dos", 3.2, true);
+        final AutoFromPathPlanner DefensivePt3 = new AutoFromPathPlanner(drivetrain, "20222BallPlus1-tres", 3.2, true);
+        final AutoFromPathPlanner DefensivePt4 = new AutoFromPathPlanner(drivetrain, "20222BallPlus1-quatro", 3.2, true);
 
         final SmartFeed m_autoFeed = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color);
         final SmartFeed m_autoFeed2 = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color);

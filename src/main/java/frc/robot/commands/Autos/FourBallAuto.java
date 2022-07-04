@@ -31,9 +31,9 @@ public class FourBallAuto extends SequentialCommandGroup {
         m_left = leftIntake;
         m_right = rightIntake;
 
-        final AutoFromPathPlanner fourBallOne = new AutoFromPathPlanner(drivetrain, "20224BallAuto-1", 3.2);
-        final AutoFromPathPlanner fourBallTwo = new AutoFromPathPlanner(drivetrain, "20224BallAuto-2", 3.2);
-        final AutoFromPathPlanner fourBallThree = new AutoFromPathPlanner(drivetrain, "20224BallAuto-3", 3.2);
+        final AutoFromPathPlanner fourBallOne = new AutoFromPathPlanner(drivetrain, "20224BallAuto-1", 3.2, true);
+        final AutoFromPathPlanner fourBallTwo = new AutoFromPathPlanner(drivetrain, "20224BallAuto-2", 3.2, true);
+        final AutoFromPathPlanner fourBallThree = new AutoFromPathPlanner(drivetrain, "20224BallAuto-3", 3.2, true);
 
         final SmartFeed m_autoFeed = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color);
         final SmartFeed m_autoFeed2 = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color);

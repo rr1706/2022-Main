@@ -20,7 +20,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterHood;
 import frc.robot.subsystems.Turret;
 
-public class ShootWhileMove extends CommandBase {
+public class SmartShooter extends CommandBase {
     private final Shooter m_shooter;
     private final Turret m_turret;
     private final Drivetrain m_drive;
@@ -35,7 +35,7 @@ public class ShootWhileMove extends CommandBase {
     private static LinearInterpolationTable m_hoodTable = ShooterConstants.kHoodTable;
     private static LinearInterpolationTable m_rpmTable = ShooterConstants.kRPMTable;
 
-    public ShootWhileMove(Shooter shooter, Turret turret, Drivetrain drive, ShooterHood hood, boolean updatePose,
+    public SmartShooter(Shooter shooter, Turret turret, Drivetrain drive, ShooterHood hood, boolean updatePose,
             ColorSensor color, XboxController driver) {
         m_shooter = shooter;
         m_turret = turret;
@@ -47,7 +47,7 @@ public class ShootWhileMove extends CommandBase {
         addRequirements(shooter, turret, hood);
     }
 
-    public ShootWhileMove(Shooter shooter, Turret turret, Drivetrain drive, ShooterHood hood, boolean updatePose,
+    public SmartShooter(Shooter shooter, Turret turret, Drivetrain drive, ShooterHood hood, boolean updatePose,
             ColorSensor color) {
         m_shooter = shooter;
         m_turret = turret;

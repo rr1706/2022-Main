@@ -31,7 +31,7 @@ public class TwoBallRight extends SequentialCommandGroup {
         m_left = leftIntake;
         m_right = rightIntake;
 
-        final AutoFromPathPlanner fiveBallUno = new AutoFromPathPlanner(drivetrain, "20225BallAuto-uno", 2.5);
+        final AutoFromPathPlanner fiveBallUno = new AutoFromPathPlanner(drivetrain, "20225BallAuto-uno", 2.5, true);
         final SmartFeed m_autoFeed = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color);
 
         addCommands(

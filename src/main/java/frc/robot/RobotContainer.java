@@ -46,7 +46,7 @@ import frc.robot.commands.Intakes.UnjamIntakes;
 import frc.robot.commands.TurretedShooter.FaceTurret;
 import frc.robot.commands.TurretedShooter.RunShooter;
 import frc.robot.commands.TurretedShooter.ShootAtHangar;
-import frc.robot.commands.TurretedShooter.ShootWhileMove;
+import frc.robot.commands.TurretedShooter.SmartShooter;
 import frc.robot.commands.TurretedShooter.ZeroHood;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorSensor;
@@ -114,7 +114,7 @@ public class RobotContainer {
 
   private final RunShooter m_runShooter = new RunShooter(m_shooter, m_turret, m_robotDrive, m_hood, true, m_colorSensor,
       m_driverController);
-  private final ShootWhileMove m_moveShoot = new ShootWhileMove(m_shooter, m_turret, m_robotDrive, m_hood, true,
+  private final SmartShooter m_moveShoot = new SmartShooter(m_shooter, m_turret, m_robotDrive, m_hood, true,
       m_colorSensor, m_driverController);
   private final ShootAtHangar m_aimHanger = new ShootAtHangar(m_shooter, m_turret, m_robotDrive, m_hood);
 

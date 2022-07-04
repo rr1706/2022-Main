@@ -61,7 +61,7 @@ public class SmartIntake extends CommandBase {
                 m_leftRunning = false;
                 m_leftStopTime = currentTime;
             }
-
+            m_rightRunning = true;
             m_rightIntake.extend();
             m_rightIntake.run(IntakeConstants.kSpeed);
         } else if (yVelAve > 0.20) {

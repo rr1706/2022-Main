@@ -74,6 +74,9 @@ public class Drivetrain extends SubsystemBase {
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
       ahrs.getRotation2d());
 
+  private final SwerveDriveOdometry m_autoOdometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
+      ahrs.getRotation2d());
+
   /**
    * Constructs a Drivetrain and resets the Gyro and Keep Angle parameters
    */
@@ -168,6 +171,11 @@ public class Drivetrain extends SubsystemBase {
         m_backRight.getState());
   }
 
+  public void updateAutoOdometry() {
+    m_autoOdometry.update(ahrs.getRotation2d(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
+    m_backRight.getState());
+  }
+
   /**
    * Function to retrieve latest robot gyro angle.
    * 
@@ -195,11 +203,19 @@ public class Drivetrain extends SubsystemBase {
   public Pose2d getPose() {
     Pose2d pose = m_odometry.getPoseMeters();
     Translation2d position = pose.getTranslation();
-    // Rotation2d heading = getGyro();
     SmartDashboard.putNumber("Robot X", position.getX());
     SmartDashboard.putNumber("Robot Y", position.getY());
     SmartDashboard.putNumber("Robot Gyro", getGyro().getRadians());
     return m_odometry.getPoseMeters();
+  }
+
+  public Pose2d getAutoPose() {
+    updateAutoOdometry();
+    Pose2d pose = m_autoOdometry.getPoseMeters();
+    Translation2d position = pose.getTranslation();
+    SmartDashboard.putNumber("Auto X", position.getX());
+    SmartDashboard.putNumber("Auto Y", position.getY());
+    return m_autoOdometry.getPoseMeters();
   }
 
   /**

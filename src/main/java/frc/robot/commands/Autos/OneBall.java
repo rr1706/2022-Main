@@ -30,7 +30,7 @@ public class OneBall extends SequentialCommandGroup {
         m_left = leftIntake;
         m_right = rightIntake;
 
-        final AutoFromPathPlanner oneBallPath = new AutoFromPathPlanner(drivetrain, "20221Ball", 2.5);
+        final AutoFromPathPlanner oneBallPath = new AutoFromPathPlanner(drivetrain, "20221Ball", 2.5, true);
         final SmartFeed m_autoFeed = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color);
 
         addCommands(
