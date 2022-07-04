@@ -2,17 +2,11 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/LiveWindow/Climber": "Subsystem",
-      "/LiveWindow/Drivetrain": "Subsystem",
-      "/LiveWindow/Elevator": "Subsystem",
-      "/LiveWindow/Intake": "Subsystem",
-      "/LiveWindow/Shooter": "Subsystem",
-      "/LiveWindow/ShooterHood": "Subsystem",
-      "/LiveWindow/Turret/PID Controller": "PIDController",
       "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[10]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[11]": "Digital Input",
       "/LiveWindow/Ungrouped/PIDController[10]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[11]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[12]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[13]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[14]": "PIDController",
@@ -53,15 +47,56 @@
       "/LiveWindow/Ungrouped/PIDController[46]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[47]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[48]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[49]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[50]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[51]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[52]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[53]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[54]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[55]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[56]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[57]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[58]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[59]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[60]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[61]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[62]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[63]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[64]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[65]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[66]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[67]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[68]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[69]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[70]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[71]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[72]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[73]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[74]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[75]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[76]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[77]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[7]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[9]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
+    },
+    "windows": {
+      "/SmartDashboard/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "open": true
     }
   }
 }

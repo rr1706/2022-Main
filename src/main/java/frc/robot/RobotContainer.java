@@ -30,6 +30,7 @@ import frc.robot.commands.InQueue;
 import frc.robot.commands.Autos.AutoHangarOne;
 import frc.robot.commands.Autos.AutoHangarTwo;
 import frc.robot.commands.Autos.FiveBall;
+import frc.robot.commands.Autos.FivePlusSweep;
 import frc.robot.commands.Autos.FourBallAuto;
 import frc.robot.commands.Autos.OneBall;
 import frc.robot.commands.Autos.TwoBallRight;
@@ -125,6 +126,8 @@ public class RobotContainer {
 
   private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive); // Create FaceTurret Command
 
+  private final Command autoMoveShoot = new FivePlusSweep(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator,
+      m_highElevator, m_turret, m_hood, m_shooter, m_climber, m_colorSensor);
   private final Command autoFiveBall = new FiveBall(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator,
       m_highElevator, m_turret, m_hood, m_shooter, m_climber, m_colorSensor);
   private final Command autoFourBall = new FourBallAuto(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator,
@@ -216,6 +219,7 @@ public class RobotContainer {
     m_chooser.addOption("Auto2Ball+2", autoHangar2);
     m_chooser.addOption("Auto4Ball", autoFourBall);
     m_chooser.addOption("Auto5Ball", autoFiveBall);
+    m_chooser.addOption("AutoMoveShoot", autoMoveShoot);
     m_chooser.addOption("Do Nothing", doNothin);
     SmartDashboard.putData(m_chooser);
   }

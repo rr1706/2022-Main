@@ -228,6 +228,7 @@ public class Drivetrain extends SubsystemBase {
     ahrs.setAngleAdjustment(pose.getRotation().getDegrees());
     keepAngle = getGyro().getRadians();
     m_odometry.resetPosition(pose, ahrs.getRotation2d().times(-1.0));
+    m_autoOdometry.resetPosition(pose, ahrs.getRotation2d().times(-1.0));
   }
 
   public void setPose(Pose2d pose) {
@@ -246,6 +247,7 @@ public class Drivetrain extends SubsystemBase {
     ahrs.setAngleAdjustment(angle.getDegrees());
     keepAngle = getGyro().getRadians();
     m_odometry.resetPosition(pose, ahrs.getRotation2d().times(-1.0));
+    m_autoOdometry.resetPosition(pose, ahrs.getRotation2d().times(-1.0));
   }
 
   /**
