@@ -107,13 +107,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    // if (m_autonomousCommand != null) {
-    // m_autonomousCommand.cancel();
-    // }
+    m_robotContainer.runTeleInitCommand(); 
+    //Stop Auto and Run Feeder and Shooter immediately in Teleop to clear balls that didnt shoot in time
   }
 
   /** This function is called periodically during operator control. */
