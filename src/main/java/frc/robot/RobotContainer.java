@@ -237,4 +237,13 @@ public class RobotContainer {
   public Command getTest() {
     return m_test;
   }
+  
+  public void runTeleInitCommand() {
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
+    m_moveShoot.schedule();
+    m_moveFeed.schedule();
+  }
+  
 }
