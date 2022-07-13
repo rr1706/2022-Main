@@ -30,7 +30,8 @@ import frc.robot.commands.InQueue;
 import frc.robot.commands.Autos.AutoHangarOne;
 import frc.robot.commands.Autos.AutoHangarTwo;
 import frc.robot.commands.Autos.FiveBall;
-import frc.robot.commands.Autos.FivePlusSweep;
+import frc.robot.commands.Autos.FivePlusOne;
+import frc.robot.commands.Autos.FivePlusTwo;
 import frc.robot.commands.Autos.FourBallAuto;
 import frc.robot.commands.Autos.OneBall;
 import frc.robot.commands.Autos.TwoBallRight;
@@ -126,7 +127,9 @@ public class RobotContainer {
 
   private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive); // Create FaceTurret Command
 
-  private final Command autoMoveShoot = new FivePlusSweep(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator,
+  private final Command autoFiveTwo = new FivePlusTwo(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator,
+      m_highElevator, m_turret, m_hood, m_shooter, m_climber, m_colorSensor);
+    private final Command autoFiveOne = new FivePlusOne(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator,
       m_highElevator, m_turret, m_hood, m_shooter, m_climber, m_colorSensor);
   private final Command autoFiveBall = new FiveBall(m_robotDrive, m_leftIntake, m_rightIntake, m_lowElevator,
       m_highElevator, m_turret, m_hood, m_shooter, m_climber, m_colorSensor);
@@ -188,7 +191,7 @@ public class RobotContainer {
     new JoystickAnalogButton(m_operatorController, Side.kRight).whenPressed(m_moveFeed)
         .whenReleased(() -> m_moveFeed.stop());
 
-    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(m_unjamIntakes);
+    new JoystickButton(m_driverController, Button.kRightBumper.value).whenHeld(m_unjamIntakes);
 
     new JoystickAnalogButton(m_driverController, Side.kLeft).whenPressed(m_moveFeed)
         .whenReleased(() -> m_moveFeed.stop());
@@ -219,7 +222,8 @@ public class RobotContainer {
     m_chooser.addOption("Auto2Ball+2", autoHangar2);
     m_chooser.addOption("Auto4Ball", autoFourBall);
     m_chooser.addOption("Auto5Ball", autoFiveBall);
-    m_chooser.addOption("AutoMoveShoot", autoMoveShoot);
+    m_chooser.addOption("Auto5Ball+1", autoFiveOne);
+    m_chooser.addOption("Auto5Ball+2", autoFiveOne);
     m_chooser.addOption("Do Nothing", doNothin);
     SmartDashboard.putData(m_chooser);
   }

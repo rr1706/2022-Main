@@ -247,7 +247,7 @@ public final class Constants {
     public static final int[] kValvePorts = { 4, 5 };
     public static final double[] kPID = { 0.25, 0, 0 };
     public static final Constraints kDefaultConstraints = new Constraints(50, 25);
-    public static final double kMinPose = -10.0;
+    public static final double kMinPose = -15.0;
     public static final double kMaxPose = 82.0;
     public static final double kTolerance = 1.0;
 
@@ -301,15 +301,15 @@ public final class Constants {
         // (ty-angle,distance)
         new Point2D.Double(25, 1500),
         new Point2D.Double(35, 1500),
-        new Point2D.Double(75, 2350), //
-        new Point2D.Double(90, 2460), //
-        new Point2D.Double(105, 2515), //
-        new Point2D.Double(120, 2620), //
-        new Point2D.Double(135, 2720), //
-        new Point2D.Double(150, 2825), //
-        new Point2D.Double(165, 2900), //
-        new Point2D.Double(180, 3050), //
-        new Point2D.Double(195, 3195), //
+        new Point2D.Double(75, 2340), //
+        new Point2D.Double(90, 2450), //
+        new Point2D.Double(105, 2505), //
+        new Point2D.Double(120, 2610), //
+        new Point2D.Double(135, 2710), //
+        new Point2D.Double(150, 2815), //
+        new Point2D.Double(165, 2890), //
+        new Point2D.Double(180, 3040), //
+        new Point2D.Double(195, 3185), //
         new Point2D.Double(210, 3315), //
         new Point2D.Double(225, 3450), //
         new Point2D.Double(350, 3800)
@@ -348,7 +348,6 @@ public final class Constants {
     public static final double kMaxAngularAccel = Math.PI; // Maximum Angular Speed desired. NOTE: Robot can exceed this
                                                            // but spinning fast is not particularly useful or driver
                                                            // friendly
-
     public static final double kPXController = 3.0;
     public static final double kPYController = 3.0;
     public static final double kPThetaController = 3.0;

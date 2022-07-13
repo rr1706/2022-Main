@@ -87,7 +87,7 @@ public class AutoSwerveController extends CommandBase {
         requireNonNullParam(yController, "xController", "SwerveControllerCommand"),
         requireNonNullParam(thetaController, "thetaController", "SwerveControllerCommand"));
 
-    m_controller.setTolerance(new Pose2d(0.3, 0.3, new Rotation2d(0.15)));
+    m_controller.setTolerance(new Pose2d(0.5, 0.5, new Rotation2d(0.25)));
 
     m_outputModuleStates = requireNonNullParam(outputModuleStates, "frontLeftOutput", "SwerveControllerCommand");
 

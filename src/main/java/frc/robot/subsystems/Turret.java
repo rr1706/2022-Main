@@ -118,7 +118,12 @@ public class Turret extends SubsystemBase {
   }
 
   public void setToStartPosition() {
+    m_desiredAngle = TurretConstants.kStartingPosition*TurretConstants.kRatio*2*Math.PI;
     m_controller.setReference(TurretConstants.kStartingPosition, ControlType.kSmartMotion);
+  }
+
+  public boolean readyToClimb() {
+    return Math.abs(m_desiredAngle - getMeasurement()) <= Math.PI/2.0;
   }
 
 }

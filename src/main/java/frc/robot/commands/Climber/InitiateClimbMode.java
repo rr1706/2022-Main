@@ -58,9 +58,9 @@ public class InitiateClimbMode extends CommandBase {
   @Override
   public void execute() {
 
-    if (m_turret.atDesiredAngle() && !m_climbModeReady) {
+    if (!m_climbModeReady) {
       m_climbModeReady = true;
-      m_climber.setDesiredPose(76.0);
+      m_climber.setDesiredPose(69.5);
       m_climber.run();
     }
 
@@ -71,7 +71,7 @@ public class InitiateClimbMode extends CommandBase {
     m_turret.setToStartPosition();
     m_turret.stop();
     m_climber.extend();
-    m_climber.setDesiredPose(1.0);
+    m_climber.setDesiredPose(2.0);
     m_climber.stop();
     m_climber.changeConstraints(ClimberConstants.kDefaultConstraints);
   }

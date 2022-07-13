@@ -36,7 +36,7 @@ public class ClimbFromFloor extends CommandBase {
 
         if (m_climber.atSetpoint() && !m_dragAss) {
             m_climber.changeConstraints(new Constraints(90, 30));
-            m_climber.setDesiredPose(-10.0);
+            m_climber.setDesiredPose(-15.0);
             m_dragAss = true;
         } else if (m_climber.getLimit() && !m_pastHooks) {
             m_climber.stop();

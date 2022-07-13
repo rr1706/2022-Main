@@ -16,14 +16,14 @@ public class Extend extends CommandBase {
     @Override
     public void initialize() {
         m_climber.changeConstraints(new Constraints(100, 250));
-        m_climber.setDesiredPose(76.0);
+        m_climber.setDesiredPose(69.5);
         m_hasExtended = false;
     }
 
     @Override
     public void execute() {
         double pose = m_climber.getPose();
-        if (pose >= 20 && !m_hasExtended) {
+        if (pose >= 15 && !m_hasExtended) {
             m_climber.retract();
         }
         if (m_climber.atSetpoint() && !m_hasExtended) {
