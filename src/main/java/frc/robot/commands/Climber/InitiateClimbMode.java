@@ -19,7 +19,6 @@ public class InitiateClimbMode extends CommandBase {
   private final Intake m_rightIntake;
   private final Elevator m_highElevator;
   private final Elevator m_lowElevator;
-  private boolean m_climbModeReady = false;
 
   public InitiateClimbMode(Shooter shooter, ShooterHood hood, Turret turret, Intake left, Intake right,
       Elevator high, Elevator low, Climber climber) {
@@ -48,7 +47,6 @@ public class InitiateClimbMode extends CommandBase {
     m_highElevator.stop();
     m_climber.extend();
     m_climber.changeConstraints(new Constraints(100, 250));
-    m_climbModeReady = false;
   }
 
   /**
@@ -57,13 +55,8 @@ public class InitiateClimbMode extends CommandBase {
    */
   @Override
   public void execute() {
-
-    if (!m_climbModeReady) {
-      m_climbModeReady = true;
-      m_climber.setDesiredPose(69.5);
+      m_climber.setDesiredPose(ClimberConstants.kExtendPose);
       m_climber.run();
-    }
-
   }
 
   @Override
@@ -76,7 +69,4 @@ public class InitiateClimbMode extends CommandBase {
     m_climber.changeConstraints(ClimberConstants.kDefaultConstraints);
   }
 
-  public boolean isClimbModeReady() {
-    return m_climbModeReady;
-  }
 }

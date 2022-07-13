@@ -16,7 +16,7 @@ public class Extend extends CommandBase {
     @Override
     public void initialize() {
         m_climber.changeConstraints(new Constraints(100, 250));
-        m_climber.setDesiredPose(69.5);
+        m_climber.setDesiredPose(ClimberConstants.kExtendPose);
         m_hasExtended = false;
     }
 

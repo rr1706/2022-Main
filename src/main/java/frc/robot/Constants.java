@@ -248,9 +248,9 @@ public final class Constants {
     public static final double[] kPID = { 0.25, 0, 0 };
     public static final Constraints kDefaultConstraints = new Constraints(50, 25);
     public static final double kMinPose = -15.0;
-    public static final double kMaxPose = 82.0;
+    public static final double kMaxPose = 72.0;
     public static final double kTolerance = 1.0;
-
+    public static final double kExtendPose = 69.5;
   }
 
   public static final class HoodConstants {
