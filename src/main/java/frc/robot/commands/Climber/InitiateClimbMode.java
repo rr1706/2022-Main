@@ -47,16 +47,13 @@ public class InitiateClimbMode extends CommandBase {
     m_highElevator.stop();
     m_climber.extend();
     m_climber.changeConstraints(new Constraints(100, 250));
+    m_climber.setDesiredPose(ClimberConstants.kExtendPose);
+    m_climber.run();
   }
 
-  /**
-   * the execute function is overloaded with the function to drive the swerve
-   * drivetrain
-   */
   @Override
   public void execute() {
-      m_climber.setDesiredPose(ClimberConstants.kExtendPose);
-      m_climber.run();
+
   }
 
   @Override

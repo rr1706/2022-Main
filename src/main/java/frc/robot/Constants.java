@@ -191,7 +191,7 @@ public final class Constants {
    */
   public static final class VisionConstants {
     public static final double kElevationOffset = 38.5; // Degree offset of lens from horizontal due to camera mount
-    public static final double kAzimuthalAngle = -0.50; // Degree azimuthal offset of limelight
+    public static final double kAzimuthalAngle = 0.0; // Degree azimuthal offset of limelight
     public static final double kTargetCenterHeightFromLens = 81.0; // Center Height of the Target in inches above the
                                                                    // lens
     public static final double kTrackTolerance = 0.0200; // Allowable Limelight angle error in radians

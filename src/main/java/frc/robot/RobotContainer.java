@@ -239,11 +239,11 @@ public class RobotContainer {
   }
   
   public void runTeleInitCommand() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    if (getAuto() != null) {
+      getAuto().cancel();
     }
     m_moveShoot.schedule();
-    m_moveFeed.schedule();
+    new SmartFeed(m_turret, m_highElevator, m_lowElevator, m_robotDrive, m_shooter, m_hood, m_colorSensor).withTimeout(2.0).schedule();
   }
   
 }
