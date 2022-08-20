@@ -42,7 +42,7 @@ public class TwoBallRight extends SequentialCommandGroup {
                         new RunShooter(shooter, turret, drivetrain, hood, false, color),
                         new SequentialCommandGroup(
                                 fiveBallUno
-                                        .raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom))),
+                                        .raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom, color, shooter, hood, turret))),
                                 m_autoFeed.raceWith(new RunIntake(leftIntake).alongWith(
                                         new WaitCommand(5.0).andThen(new InstantCommand(() -> m_autoFeed.stop())))))));
     }

@@ -23,7 +23,7 @@ public class Climber extends SubsystemBase {
     private final CANSparkMax m_motor1 = new CANSparkMax(ClimberConstants.kMotorID[0], MotorType.kBrushless);
     private final CANSparkMax m_motor2 = new CANSparkMax(ClimberConstants.kMotorID[1], MotorType.kBrushless);
     private final RelativeEncoder m_encoder = m_motor1.getEncoder();
-    private final DoubleSolenoid m_valve = new DoubleSolenoid(GlobalConstants.PCHID, PneumaticsModuleType.REVPH,
+    private final DoubleSolenoid m_valve = new DoubleSolenoid(GlobalConstants.PCHID, PneumaticsModuleType.CTREPCM,
             ClimberConstants.kValvePorts[0], ClimberConstants.kValvePorts[1]);
     private final ProfiledPIDController m_PID = new ProfiledPIDController(ClimberConstants.kPID[0],
             ClimberConstants.kPID[1], ClimberConstants.kPID[2], ClimberConstants.kDefaultConstraints);

@@ -43,6 +43,7 @@ import frc.robot.commands.Climber.InitiateClimbMode;
 import frc.robot.commands.Climber.ZeroClimber;
 import frc.robot.commands.Elevator.IndexElevator;
 import frc.robot.commands.Elevator.SmartFeed;
+import frc.robot.commands.Intakes.RunIntake;
 import frc.robot.commands.Intakes.SmartIntake;
 import frc.robot.commands.Intakes.UnjamIntakes;
 import frc.robot.commands.TurretedShooter.FaceTurret;
@@ -91,19 +92,19 @@ public class RobotContainer {
 
   private final ColorSensor m_colorSensor = new ColorSensor();
 
-  private final IndexElevator m_indexElevator = new IndexElevator(m_highElevator, m_lowElevator, m_operatorController);
+  private final IndexElevator m_indexElevator = new IndexElevator(m_highElevator, m_lowElevator, m_colorSensor, m_shooter, m_hood, m_turret, m_operatorController);
   private final ZeroClimber m_ZeroClimb = new ZeroClimber(m_climber);
   private final ZeroHood m_ZeroHood = new ZeroHood(m_hood);
 
-  private final SmartIntake m_runIntakes = new SmartIntake(m_rightIntake, m_leftIntake, m_robotDrive);
+  private final SmartIntake m_runIntakes = new SmartIntake(m_rightIntake, m_leftIntake, m_robotDrive, m_driverController);
 
   private final UnjamIntakes m_unjamIntakes = new UnjamIntakes(m_leftIntake, m_rightIntake);
 
   private final InitiateClimbMode m_climbMode = new InitiateClimbMode(m_shooter, m_hood, m_turret, m_leftIntake,
       m_rightIntake, m_highElevator, m_lowElevator, m_climber);
 
-  private final ClimbFromFloor m_firstClimb = new ClimbFromFloor(m_climber);
-  private final FastMidRung m_fastClimb = new FastMidRung(m_climber);
+  private final ClimbFromFloor m_firstClimb = new ClimbFromFloor(m_climber, m_robotDrive);
+  private final FastMidRung m_nextClimb = new FastMidRung(m_climber, m_robotDrive);
   private final FinalClimb m_finalClimb = new FinalClimb(m_climber);
   private final Extend m_extend = new Extend(m_climber);
 
@@ -187,7 +188,9 @@ public class RobotContainer {
         .whenReleased(() -> m_moveFeed.stop());
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenHeld(m_unjamIntakes);
-
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+        .whenHeld(new RunIntake(m_leftIntake).alongWith(new RunIntake(m_rightIntake)))
+        .whenReleased(new InstantCommand(()->m_leftIntake.stop()).andThen(new InstantCommand(()->m_rightIntake.stop())));
 
     new POVButton(m_operatorController, 0).whenPressed(m_ZeroHood);
     new POVButton(m_operatorController, 180).whenPressed(m_ZeroClimb);
@@ -196,13 +199,15 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kStart.value).whenPressed(() -> m_climbMode.cancel());
 
     new JoystickButton(m_operatorController, Button.kA.value)
-        .whenPressed(new ConditionalCommand(m_firstClimb, new WaitCommand(0.0), () -> m_climbMode.isScheduled()));
+        .whenPressed(new ConditionalCommand(m_firstClimb.andThen(new Extend(m_climber)), new WaitCommand(0.0), () -> m_climbMode.isScheduled()));
     new JoystickButton(m_operatorController, Button.kX.value)
-        .whenPressed(new ConditionalCommand(m_extend, new WaitCommand(0.0), () -> m_climbMode.isScheduled()));
+        .whenPressed(new ConditionalCommand(m_extend, new WaitCommand(0.0), () -> m_climbMode.isScheduled()));    
     new JoystickButton(m_operatorController, Button.kB.value)
         .whenPressed(new ConditionalCommand(m_finalClimb, new WaitCommand(0.0), () -> m_climbMode.isScheduled()));
     new JoystickButton(m_operatorController, Button.kY.value)
-        .whenPressed(new ConditionalCommand(m_fastClimb, new WaitCommand(0.0), () -> m_climbMode.isScheduled()));
+        .whenPressed(new ConditionalCommand(m_nextClimb.andThen(new Extend(m_climber)), new WaitCommand(0.0), () -> m_climbMode.isScheduled()));
+
+
 
   }
 

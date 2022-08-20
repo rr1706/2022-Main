@@ -124,6 +124,10 @@ public class Drivetrain extends SubsystemBase {
     m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, GlobalConstants.kLoopTime);
     m_lastFieldRelVel = m_fieldRelVel;
 
+    SmartDashboard.putNumber("Gyro X", ahrs.getRawGyroX());
+    SmartDashboard.putNumber("Gyro Y", ahrs.getRawGyroY());
+    SmartDashboard.putNumber("Gyro Z", ahrs.getRawGyroZ());
+
     // SmartDashboard.putNumber("Accel X", m_fieldRelAccel.ax);
     // SmartDashboard.putNumber("Accel Y", m_fieldRelAccel.ay);
     // SmartDashboard.putNumber("Alpha", m_fieldRelAccel.alpha);
@@ -183,6 +187,10 @@ public class Drivetrain extends SubsystemBase {
    */
   public Rotation2d getGyro() {
     return ahrs.getRotation2d();
+  }
+
+  public double getGyroXVel() {
+    return ahrs.getRawGyroX();
   }
 
   public FieldRelativeSpeed getFieldRelativeSpeed() {

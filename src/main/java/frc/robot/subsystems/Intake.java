@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase {
         m_motor = new CANSparkMax(motorCANID, MotorType.kBrushless);
         m_encoder = m_motor.getEncoder();
         m_PID = m_motor.getPIDController();
-        m_actuator = new DoubleSolenoid(GlobalConstants.PCHID, PneumaticsModuleType.REVPH, airChannels[0],
+        m_actuator = new DoubleSolenoid(GlobalConstants.PCHID, PneumaticsModuleType.CTREPCM, airChannels[0],
                 airChannels[1]);
 
         m_motor.setSmartCurrentLimit(CurrentLimit.kIntake);

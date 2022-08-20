@@ -51,10 +51,10 @@ public final class Constants {
     public static final int kBackLeftTurningEncoderPort = 3; // Analog Port of the Module Absolute Encoder
     public static final int kBackRightTurningEncoderPort = 2; // Analog Port of the Module Absolute Encoder
 
-    public static final double kFrontLeftOffset = -1.1634 - 0.269 - 0.346 + 3.141593; // Encoder Offset in Radians
-    public static final double kFrontRightOffset = -3.442 + 3.1415; // Encoder Offset in Radians
-    public static final double kBackLeftOffset = -0.0884 - 5.55 + 2.816 + 3.141593; // Encoder Offset in Radians
-    public static final double kBackRightOffset = -1.6194 + 0.542 + 3.14159 - 7.985; // Encoder Offset in Radians
+    public static final double kFrontLeftOffset = 1.3632+0.0122; // Encoder Offset in Radians
+    public static final double kFrontRightOffset = -0.3005-0.195-0.0115; // Encoder Offset in Radians
+    public static final double kBackLeftOffset = 0.3192+0.0332; // Encoder Offset in Radians
+    public static final double kBackRightOffset = -5.9208+0.008; // Encoder Offset in Radians
 
     // Drive motor PID is best done on the roboRIO currently as the SparkMAX does
     // not allow for static gain values on the PID controller,
@@ -112,7 +112,7 @@ public final class Constants {
     public static final double kOuterDeadband = 0.98; // This value should be lower than the analog stick X or Y reading
                                                       // when aimed at a 45deg angle (Such that X and Y are are
                                                       // maximized simultaneously)
-    public static final double kTranslationSlew = 1.45;
+    public static final double kTranslationSlew = 1.65;
     public static final double kRotationSlew = 3.00;
 
     // Minimum allowable rotation command (in radians/s) assuming user input is
@@ -248,10 +248,11 @@ public final class Constants {
     public static final double[] kPID = { 0.25, 0, 0 };
     public static final Constraints kDefaultConstraints = new Constraints(50, 25);
     public static final double kMinPose = -15.0;
-    public static final double kMaxPose = 72.0;
+    public static final double kMaxPose = 70.0;
     public static final double kTolerance = 1.0;
-    public static final double kExtendPose = 69.5;
+    public static final double kExtendPose = 65.0;
   }
+
 
   public static final class HoodConstants {
     public static final int kMotorID = 11;
@@ -274,7 +275,7 @@ public final class Constants {
     public static final double kStatic = 0.018;
     public static final double kFF = 0.0001635;
     public static final double kAccelCompFactor = 0.100; // in units of seconds
-    public static final double kMaxRPM = 4000.0;
+    public static final double kMaxRPM = 4300.0;
     public static final double kMaxNegPower = -0.25;
 
     public static final double kHangarRPM = 1200;
@@ -311,22 +312,25 @@ public final class Constants {
         new Point2D.Double(180, 3040), //
         new Point2D.Double(195, 3185), //
         new Point2D.Double(210, 3315), //
-        new Point2D.Double(225, 3450), //
-        new Point2D.Double(350, 3800)
+        new Point2D.Double(225, 3500), //
+        new Point2D.Double(240, 3700),
+        new Point2D.Double(270, 4000),
     };
 
     public static final LinearInterpolationTable kRPMTable = new LinearInterpolationTable(kRPMPoints);
 
     private static final Point2D[] kShotTimes = new Point2D.Double[] {
         // (ty-angle,time)
-        new Point2D.Double(105, 0.82),
+        new Point2D.Double(105, 0.77),
         new Point2D.Double(135, 0.82),
         new Point2D.Double(165, 0.85),
-        new Point2D.Double(195, 0.85),
-        new Point2D.Double(250, 1.05),
+        new Point2D.Double(195, 0.87),
+        new Point2D.Double(240, 1.03)
     };
 
     public static final LinearInterpolationTable kTimeTable = new LinearInterpolationTable(kShotTimes);
+
+
   }
 
   public static final class ColorConstants{

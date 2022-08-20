@@ -81,8 +81,8 @@ public class Robot extends TimedRobot {
       SmartDashboard.putNumber("Limelight ty", Limelight.ty());
     }
 
-    PneumaticHub pneumaticHub = new PneumaticHub(GlobalConstants.PCHID);
-    SmartDashboard.putNumber("Compressor Current", pneumaticHub.getCompressorCurrent());
+    //PneumaticHub pneumaticHub = new PneumaticHub(GlobalConstants.PCHID);
+    //SmartDashboard.putNumber("Compressor Current", pneumaticHub.getCompressorCurrent());
 
   }
 

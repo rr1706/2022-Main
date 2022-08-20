@@ -42,14 +42,14 @@ public class AutoHangarTwo extends SequentialCommandGroup {
                 new ParallelRaceGroup(
                         new RunShooter(shooter, turret, drivetrain, hood, false, color),
                         new SequentialCommandGroup(
-                                new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))
+                                new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom, color, shooter, hood, turret))
                                         .raceWith(DefensivePt1.andThen(DefensivePt2)),
                                 m_autoFeed.raceWith(
                                         new WaitCommand(1.5).andThen(new InstantCommand(() -> m_autoFeed.stop()))),
                                 new InstantCommand(() -> rightIntake.stop()))),
                 new ParallelRaceGroup(
                         new SequentialCommandGroup(
-                                DefensivePt3.raceWith(new IndexElevator(top, bottom).alongWith(new RunIntake(leftIntake)
+                                DefensivePt3.raceWith(new IndexElevator(top, bottom, color, shooter, hood, turret).alongWith(new RunIntake(leftIntake)
                                         .raceWith(new WaitCommand(1.0)).andThen(new RunIntake(rightIntake)))),
                                 new ShootAtHangar(shooter, turret, drivetrain, hood)
                                         .alongWith(new WaitCommand(1.0).andThen(m_autoFeed2.raceWith(

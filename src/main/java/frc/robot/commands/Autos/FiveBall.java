@@ -48,17 +48,17 @@ public class FiveBall extends SequentialCommandGroup {
                         new RunShooter(shooter, turret, drivetrain, hood, false, color),
                         new SequentialCommandGroup(
                                 fiveBallUno
-                                        .raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom))),
+                                        .raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom, color, shooter, hood, turret))),
                                 m_autoFeed.raceWith(new RunIntake(leftIntake).alongWith(
                                         new WaitCommand(1.0).andThen(new InstantCommand(() -> m_autoFeed.stop())))),
                                 fiveBallDos
-                                        .raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom))),
+                                        .raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom, color, shooter, hood, turret))),
                                 m_autoFeed2.raceWith(
                                         new WaitCommand(1.0).andThen(new InstantCommand(() -> m_autoFeed2.stop()))),
                                 fiveBallTres.andThen(new WaitCommand(0.5))
-                                        .raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom))),
+                                        .raceWith(new RunIntake(leftIntake).alongWith(new IndexElevator(top, bottom, color, shooter, hood, turret))),
                                 fiveBallQuatro
-                                        .raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom))),
+                                        .raceWith(new RunIntake(rightIntake).alongWith(new IndexElevator(top, bottom, color, shooter, hood, turret))),
                                 m_autoFeed3.raceWith(new RunIntake(rightIntake).raceWith(
                                         new WaitCommand(5.0).andThen(new InstantCommand(() -> m_autoFeed3.stop())))))));
     }

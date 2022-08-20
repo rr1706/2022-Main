@@ -49,7 +49,7 @@ public class FivePlusOne extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new SmartShooter(shooter, turret, drivetrain, hood, true, color),
                         new SequentialCommandGroup(
-                                move11.andThen(new WaitCommand(0.5),move12).raceWith(new RunIntake(leftIntake), new WaitCommand(3.00).andThen(new RunIntake(rightIntake)), new WaitCommand(2.25).raceWith(new IndexElevator(top, bottom)).andThen(m_autoFeed)),
+                                move11.andThen(new WaitCommand(0.5),move12).raceWith(new RunIntake(leftIntake), new WaitCommand(3.00).andThen(new RunIntake(rightIntake)), new WaitCommand(2.25).raceWith(new IndexElevator(top, bottom, color, shooter, hood, turret)).andThen(m_autoFeed)),
                                 move2.raceWith(new RunIntake(leftIntake), new RunIntake(rightIntake),m_autoFeed2),
                                 new WaitCommand(10.0).raceWith(m_autoFeed3))
                                 ));

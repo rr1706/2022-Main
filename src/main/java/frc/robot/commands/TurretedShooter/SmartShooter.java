@@ -99,21 +99,46 @@ public class SmartShooter extends CommandBase {
 
         SmartDashboard.putNumber("Calculated (in)", dist);
 
-        double fixedShotTime = m_timeTable.getOutput(dist);
+        //double fixedShotTime = m_timeTable.getOutput(dist);
+        double shotTime = m_timeTable.getOutput(dist);
 
-        double virtualGoalX = target.getX()
-                - fixedShotTime * (robotVel.vx + robotAccel.ax * ShooterConstants.kAccelCompFactor);
-        double virtualGoalY = target.getY()
-                - fixedShotTime * (robotVel.vy + robotAccel.ay * ShooterConstants.kAccelCompFactor);
+        SmartDashboard.putNumber("Fixed Time", shotTime);
 
-        SmartDashboard.putNumber("Goal X", virtualGoalX);
-        SmartDashboard.putNumber("Goal Y", virtualGoalY);
+        Translation2d movingGoalLocation = new Translation2d();
 
-        Translation2d movingGoalLocation = new Translation2d(virtualGoalX, virtualGoalY);
+        for(int i=0;i<5;i++){
 
-        Translation2d toMovingGoal = movingGoalLocation.minus(m_drive.getPose().getTranslation());
+            double virtualGoalX = target.getX()
+                    - shotTime * (robotVel.vx + robotAccel.ax * ShooterConstants.kAccelCompFactor);
+            double virtualGoalY = target.getY()
+                    - shotTime * (robotVel.vy + robotAccel.ay * ShooterConstants.kAccelCompFactor);
 
-        double newDist = toMovingGoal.getDistance(new Translation2d()) * 39.37;
+            SmartDashboard.putNumber("Goal X", virtualGoalX);
+            SmartDashboard.putNumber("Goal Y", virtualGoalY);
+
+            Translation2d testGoalLocation = new Translation2d(virtualGoalX, virtualGoalY);
+
+            Translation2d toTestGoal = testGoalLocation.minus(m_drive.getPose().getTranslation());
+
+            double newShotTime = m_timeTable.getOutput(toTestGoal.getDistance(new Translation2d()) * 39.37);
+
+            if(Math.abs(newShotTime-shotTime) <= 0.04){
+                i=4;
+            }
+            
+            if(i == 4){
+                movingGoalLocation = testGoalLocation;
+                SmartDashboard.putNumber("NewShotTime", newShotTime);
+            }
+            else{
+                shotTime = (shotTime+newShotTime)/2.0;
+            }
+
+        }
+
+        double newDist = movingGoalLocation.minus(m_drive.getPose().getTranslation()).getDistance(new Translation2d()) * 39.37;
+
+        SmartDashboard.putNumber("NewDist", newDist);
 
         m_turret.aimAtGoal(m_drive.getPose(), movingGoalLocation, false);
 

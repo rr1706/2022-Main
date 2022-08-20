@@ -40,7 +40,7 @@ public class OneBall extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new RunShooter(shooter, turret, drivetrain, hood, false, color),
                         new SequentialCommandGroup(
-                                oneBallPath.raceWith((new IndexElevator(top, bottom))),
+                                oneBallPath.raceWith((new IndexElevator(top, bottom, color, shooter, hood, turret))),
                                 m_autoFeed.raceWith(
                                         new WaitCommand(5.0).andThen(new InstantCommand(() -> m_autoFeed.stop()))))));
     }

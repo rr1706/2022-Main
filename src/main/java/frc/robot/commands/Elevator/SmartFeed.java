@@ -29,7 +29,7 @@ public class SmartFeed extends CommandBase {
     private boolean m_ballInThroat = false;
     private double m_shotTime = Double.NEGATIVE_INFINITY;
     private double m_throatTime = Double.NEGATIVE_INFINITY;
-    private double m_shotDistLimiter = 240;
+    private double m_shotDistLimiter = 320;
 
     public SmartFeed(Turret turret, Elevator top, Elevator bottom, Drivetrain drive, Shooter shooter, ShooterHood hood,
             XboxController operator) {
@@ -104,7 +104,7 @@ addRequirements(top, bottom);
             m_ballInThroat = true;
         }
 
-        boolean colorEvaluated = m_ballInThroat && currentTime >= m_throatTime + 0.100;
+        boolean colorEvaluated = m_ballInThroat && currentTime >= m_throatTime + 0.140;
 
         SmartDashboard.putBoolean("color evaluated", colorEvaluated);
         SmartDashboard.putBoolean("ball in throat", m_ballInThroat);
