@@ -47,6 +47,8 @@ public class Shooter extends SubsystemBase {
         m_motor2.burnFlash();
 
         m_PID.setTolerance(ShooterConstants.kRPMTolerance);
+        //m_PID.setIntegratorRange(0, 0);
+
         m_PID.setIntegratorRange(-ShooterConstants.kIntRange, ShooterConstants.kIntRange);
 
     }
@@ -75,6 +77,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter RPM", m_encoder1.getVelocity());
+        SmartDashboard.putNumber("Shooter Error", m_RPM-m_encoder1.getVelocity());
 
     }
 

@@ -54,7 +54,7 @@ public class FastMidRung extends CommandBase {
         if (m_climber.getLimit() && !m_pastHooks) {
             m_climber.stop();
             m_climber.setPoseRef(0.0);
-            m_climber.setDesiredPose(-2.0);
+            m_climber.setDesiredPose(-3.0);
             m_time = currentTime;
             m_pastHooks = true;
         } else if (m_pastHooks && currentTime > m_time + 1.5) {

@@ -27,7 +27,7 @@ public final class Constants {
 
   public static final class GoalConstants {
     public static final Translation2d kGoalLocation = new Translation2d(8.23, 4.115);
-    public static final Translation2d kWrongBallGoal = new Translation2d(5.50, 4.115);
+    public static final Translation2d kWrongBallGoal = new Translation2d(3.00, 4.115);
     public static final Translation2d kHangerLocation = new Translation2d(2.00, 6.00);
 
   }
@@ -112,7 +112,7 @@ public final class Constants {
     public static final double kOuterDeadband = 0.98; // This value should be lower than the analog stick X or Y reading
                                                       // when aimed at a 45deg angle (Such that X and Y are are
                                                       // maximized simultaneously)
-    public static final double kTranslationSlew = 1.65;
+    public static final double kTranslationSlew = 1.55;
     public static final double kRotationSlew = 3.00;
 
     // Minimum allowable rotation command (in radians/s) assuming user input is
@@ -137,7 +137,7 @@ public final class Constants {
     public static final double kTranslationRampRate = 3.0; // Units of %power/s, ie 4.0 means it takes 0.25s to reach
                                                            // 100% power from 0%
     private static final double kTranslationGearRatio = 8.33333333; // Overall gear ratio of the swerve module
-    private static final double kWheelDiameter = 0.0986 * 0.960 * 0.995; // Wheel Diameter in meters, may need to be
+    private static final double kWheelDiameter = 0.0986 * 0.960; // Wheel Diameter in meters, may need to be
                                                                          // experimentally determined due to compliance
                                                                          // of floor/tread material
 
@@ -191,7 +191,7 @@ public final class Constants {
    */
   public static final class VisionConstants {
     public static final double kElevationOffset = 38.5; // Degree offset of lens from horizontal due to camera mount
-    public static final double kAzimuthalAngle = 0.0; // Degree azimuthal offset of limelight
+    public static final double kAzimuthalAngle = 1.0; // Degree azimuthal offset of limelight
     public static final double kTargetCenterHeightFromLens = 81.0; // Center Height of the Target in inches above the
                                                                    // lens
     public static final double kTrackTolerance = 0.0200; // Allowable Limelight angle error in radians
@@ -257,7 +257,7 @@ public final class Constants {
   public static final class HoodConstants {
     public static final int kMotorID = 11;
     public static final double kHoodTolerance = 5.0;
-    public static final double kMaxAngle = 38.0;
+    public static final double kMaxAngle = 39.0;
     public static final double kMinAngle = 0.5;
     public static final double kPosConvFactor = 1.27777777778;
 
@@ -270,65 +270,62 @@ public final class Constants {
     public static final int[] kMotorIDs = { 12, 13 }; // CANID of the Motor Controller for the Sooter Motor
     public static final double kRPMTolerance = 200.0; // RPMs of error allowed before a ball can be fed into t he
                                                       // shooter
-    public static final double[] kPID = { 0.00005, 0.0003, 0 }; // Defines PID values for the shooter 0.00045
+    public static final double[] kPID = { 0.0001, 0.0005, 0 }; // Defines PID values for the shooter 0.00045
     public static final double kIntRange = 0.015;
     public static final double kStatic = 0.018;
-    public static final double kFF = 0.0001635;
+    public static final double kFF = 0.00016;
     public static final double kAccelCompFactor = 0.100; // in units of seconds
-    public static final double kMaxRPM = 4300.0;
-    public static final double kMaxNegPower = -0.25;
+    public static final double kMaxRPM = 3600.0;
+    public static final double kMaxNegPower = -0.30;
 
     public static final double kHangarRPM = 1200;
 
     private static final Point2D[] kHoodPoints = new Point2D.Double[] {
         // (ty-angle,distance)
-        new Point2D.Double(25, 0.0),
         new Point2D.Double(35, 0.0),
-        new Point2D.Double(75, 10.0), //
-        new Point2D.Double(90, 15.5), //
-        new Point2D.Double(105, 18.4), //
-        new Point2D.Double(120, 23.0), //
-        new Point2D.Double(135, 26.5), //
-        new Point2D.Double(150, 29.0), //
-        new Point2D.Double(165, 30.5), //
-        new Point2D.Double(180, 32.0), //
-        new Point2D.Double(195, 36.0), //
-        new Point2D.Double(210, 37.0), //
-        new Point2D.Double(225, 38.0)//
+        new Point2D.Double(55, 0.0),
+        new Point2D.Double(80, 7.5), //
+        new Point2D.Double(105, 16.5), //
+        new Point2D.Double(130, 22.5), //
+        new Point2D.Double(155, 26.0), //
+        new Point2D.Double(180, 27.5), //
+        new Point2D.Double(205, 29.0), //
+        new Point2D.Double(230, 33.0), //
+        new Point2D.Double(255, 33.0), //
+        new Point2D.Double(280, 36.5)
     };
+
     public static final LinearInterpolationTable kHoodTable = new LinearInterpolationTable(kHoodPoints);
 
     private static final Point2D[] kRPMPoints = new Point2D.Double[] {
         // (ty-angle,distance)
-        new Point2D.Double(25, 1500),
         new Point2D.Double(35, 1500),
-        new Point2D.Double(75, 2340), //
-        new Point2D.Double(90, 2450), //
-        new Point2D.Double(105, 2505), //
-        new Point2D.Double(120, 2610), //
-        new Point2D.Double(135, 2710), //
-        new Point2D.Double(150, 2815), //
-        new Point2D.Double(165, 2890), //
-        new Point2D.Double(180, 3040), //
-        new Point2D.Double(195, 3185), //
-        new Point2D.Double(210, 3315), //
-        new Point2D.Double(225, 3500), //
-        new Point2D.Double(240, 3700),
-        new Point2D.Double(270, 4000),
+        new Point2D.Double(55, 1860),
+        new Point2D.Double(80, 2000), //
+        new Point2D.Double(105, 2100), //
+        new Point2D.Double(130, 2170), //
+        new Point2D.Double(155, 2245), //
+        new Point2D.Double(180, 2460), //
+        new Point2D.Double(205, 2670), //
+        new Point2D.Double(230, 2840), //
+        new Point2D.Double(255, 2980), //
+        new Point2D.Double(280, 3350)
+
     };
 
     public static final LinearInterpolationTable kRPMTable = new LinearInterpolationTable(kRPMPoints);
 
     private static final Point2D[] kShotTimes = new Point2D.Double[] {
         // (ty-angle,time)
-        new Point2D.Double(105, 0.77),
-        new Point2D.Double(135, 0.82),
-        new Point2D.Double(165, 0.85),
-        new Point2D.Double(195, 0.87),
-        new Point2D.Double(240, 1.03)
+        new Point2D.Double(80, 0.78),
+        new Point2D.Double(130, 0.80),
+        new Point2D.Double(190, 0.81),
+        new Point2D.Double(240, 0.82),
+        new Point2D.Double(280, 0.83)
     };
 
     public static final LinearInterpolationTable kTimeTable = new LinearInterpolationTable(kShotTimes);
+
 
 
   }

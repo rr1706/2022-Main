@@ -122,7 +122,7 @@ public class SmartShooter extends CommandBase {
 
             double newShotTime = m_timeTable.getOutput(toTestGoal.getDistance(new Translation2d()) * 39.37);
 
-            if(Math.abs(newShotTime-shotTime) <= 0.04){
+            if(Math.abs(newShotTime-shotTime) <= 0.010){
                 i=4;
             }
             
@@ -131,7 +131,7 @@ public class SmartShooter extends CommandBase {
                 SmartDashboard.putNumber("NewShotTime", newShotTime);
             }
             else{
-                shotTime = (shotTime+newShotTime)/2.0;
+                shotTime = newShotTime;
             }
 
         }
@@ -151,7 +151,7 @@ public class SmartShooter extends CommandBase {
 
         }
 
-        if (currentTime > 0.250 && Limelight.valid()) {
+        if (currentTime > 0.250 && Limelight.valid() && Limelight.getDistance() >= 85.0) {
             double dL = Limelight.getDistance() * 0.0254;
             double tR = m_drive.getGyro().getRadians();
             double tT = m_turret.getMeasurement() - Math.PI;
