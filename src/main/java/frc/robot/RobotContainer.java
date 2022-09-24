@@ -37,7 +37,7 @@ import frc.robot.commands.Autos.OneBall;
 import frc.robot.commands.Autos.TwoBallRight;
 import frc.robot.commands.Climber.ClimbFromFloor;
 import frc.robot.commands.Climber.Extend;
-import frc.robot.commands.Climber.FastMidRung;
+import frc.robot.commands.Climber.ClimbToHighBar;
 import frc.robot.commands.Climber.FinalClimb;
 import frc.robot.commands.Climber.InitiateClimbMode;
 import frc.robot.commands.Climber.ZeroClimber;
@@ -104,7 +104,7 @@ public class RobotContainer {
       m_rightIntake, m_highElevator, m_lowElevator, m_climber);
 
   private final ClimbFromFloor m_firstClimb = new ClimbFromFloor(m_climber, m_robotDrive);
-  private final FastMidRung m_nextClimb = new FastMidRung(m_climber, m_robotDrive);
+  private final ClimbToHighBar m_nextClimb = new ClimbToHighBar(m_climber, m_robotDrive);
   private final FinalClimb m_finalClimb = new FinalClimb(m_climber);
   private final Extend m_extend = new Extend(m_climber);
 
