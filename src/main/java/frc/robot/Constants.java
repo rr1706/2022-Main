@@ -299,17 +299,17 @@ public final class Constants {
 
     private static final Point2D[] kRPMPoints = new Point2D.Double[] {
         // (ty-angle,distance)
-        new Point2D.Double(35, 1500),
-        new Point2D.Double(55, 1860),
-        new Point2D.Double(80, 2000), //
-        new Point2D.Double(105, 2100), //
-        new Point2D.Double(130, 2170), //
-        new Point2D.Double(155, 2245), //
-        new Point2D.Double(180, 2460), //
-        new Point2D.Double(205, 2670), //
-        new Point2D.Double(230, 2840), //
-        new Point2D.Double(255, 2980), //
-        new Point2D.Double(280, 3350)
+        new Point2D.Double(35, 1500+10),
+        new Point2D.Double(55, 1860+10),
+        new Point2D.Double(80, 2000+10), //
+        new Point2D.Double(105, 2100+10), //
+        new Point2D.Double(130, 2170+15), //
+        new Point2D.Double(155, 2245+20), //
+        new Point2D.Double(180, 2460+25), //
+        new Point2D.Double(205, 2670+25), //
+        new Point2D.Double(230, 2840+30), //
+        new Point2D.Double(255, 2980+35), //
+        new Point2D.Double(280, 3350+40)
 
     };
 
