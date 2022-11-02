@@ -34,13 +34,13 @@ public class FivePlusOne extends SequentialCommandGroup {
         m_left = leftIntake;
         m_right = rightIntake;
 
-        final AutoFromPathPlanner move11 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move1alt", 1.4, true);
-        final AutoFromPathPlanner move12 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move1alt2", 1.4, true);
-        final AutoFromPathPlanner move2 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move2", 1.8, true);
+        final AutoFromPathPlanner move11 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move1alt", 1.5, true);
+        final AutoFromPathPlanner move12 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move1alt2", 2.5, true);
+        final AutoFromPathPlanner move2 = new AutoFromPathPlanner(drivetrain, "20225BallAuto-Move2", 1.5, true);
 
         final SmartFeed m_autoFeed = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color, 220.0);
-        final SmartFeed m_autoFeed2 = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color, 190.0);
-        final SmartFeed m_autoFeed3 = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color, 190.0);
+        final SmartFeed m_autoFeed2 = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color, 200.0);
+        final SmartFeed m_autoFeed3 = new SmartFeed(turret, top, bottom, drivetrain, shooter, hood, color, 200.0);
 
         addCommands(
 
@@ -49,7 +49,7 @@ public class FivePlusOne extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new SmartShooter(shooter, turret, drivetrain, hood, true, color),
                         new SequentialCommandGroup(
-                                move11.andThen(new WaitCommand(0.5),move12).raceWith(new RunIntake(leftIntake), new WaitCommand(3.00).andThen(new RunIntake(rightIntake)), new WaitCommand(2.25).raceWith(new IndexElevator(top, bottom, color, shooter, hood, turret)).andThen(m_autoFeed)),
+                                move11.andThen(new WaitCommand(0.5),move12).raceWith(new RunIntake(leftIntake), new WaitCommand(3.00).andThen(new RunIntake(rightIntake)), new WaitCommand(2.30).raceWith(new IndexElevator(top, bottom, color, shooter, hood, turret)).andThen(m_autoFeed)),
                                 move2.raceWith(new RunIntake(leftIntake), new RunIntake(rightIntake),m_autoFeed2),
                                 new WaitCommand(10.0).raceWith(m_autoFeed3))
                                 ));

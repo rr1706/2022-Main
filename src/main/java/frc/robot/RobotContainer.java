@@ -41,11 +41,13 @@ import frc.robot.commands.Climber.ClimbToHighBar;
 import frc.robot.commands.Climber.FinalClimb;
 import frc.robot.commands.Climber.InitiateClimbMode;
 import frc.robot.commands.Climber.ZeroClimber;
+import frc.robot.commands.Elevator.DemoFeed;
 import frc.robot.commands.Elevator.IndexElevator;
 import frc.robot.commands.Elevator.SmartFeed;
 import frc.robot.commands.Intakes.RunIntake;
 import frc.robot.commands.Intakes.SmartIntake;
 import frc.robot.commands.Intakes.UnjamIntakes;
+import frc.robot.commands.TurretedShooter.DemoShooter;
 import frc.robot.commands.TurretedShooter.FaceTurret;
 import frc.robot.commands.TurretedShooter.SmartShooter;
 import frc.robot.commands.TurretedShooter.ZeroHood;
@@ -110,6 +112,8 @@ public class RobotContainer {
 
   private final SmartShooter m_moveShoot = new SmartShooter(m_shooter, m_turret, m_robotDrive, m_hood, true,
       m_colorSensor, m_driverController);
+
+      //private final DemoShooter m_demo = new DemoShooter(m_shooter, m_turret, m_hood);
 
   private final SmartFeed m_moveFeed = new SmartFeed(m_turret, m_highElevator, m_lowElevator, m_robotDrive, m_shooter,
       m_hood, m_operatorController);
@@ -176,7 +180,7 @@ public class RobotContainer {
     
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_moveShoot.cancel());
 
-    new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> getAuto().cancel());
+    //new JoystickButton(m_driverController, Button.kX.value).whenPressed(m_demo);
     
     new JoystickButton(m_driverController, Button.kY.value)
         .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(3.89, 5.41, m_robotDrive.getGyro().times(-1.0))));
@@ -248,7 +252,7 @@ public class RobotContainer {
       getAuto().cancel();
     }
     m_moveShoot.schedule();
-    new SmartFeed(m_turret, m_highElevator, m_lowElevator, m_robotDrive, m_shooter, m_hood, m_colorSensor).withTimeout(2.0).schedule();
+    new WaitCommand(0.5).andThen(new SmartFeed(m_turret, m_highElevator, m_lowElevator, m_robotDrive, m_shooter, m_hood, m_colorSensor).withTimeout(2.5)).schedule();
   }
   
 }

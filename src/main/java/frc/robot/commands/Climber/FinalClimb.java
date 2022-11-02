@@ -21,7 +21,7 @@ public class FinalClimb extends CommandBase {
     @Override
     public void initialize() {
         m_climber.changeConstraints(new Constraints(40, 20));
-        m_climber.setDesiredPose(35.0);
+        m_climber.setDesiredPose(15.0);
         m_finished = false;
         m_pastHooks = false;
         m_time = Double.POSITIVE_INFINITY;

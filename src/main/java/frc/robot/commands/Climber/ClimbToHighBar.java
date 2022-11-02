@@ -30,7 +30,7 @@ public class ClimbToHighBar extends CommandBase {
 
     @Override
     public void initialize() {
-        m_climber.changeConstraints(new Constraints(90, 10));
+        m_climber.changeConstraints(new Constraints(90, 15));
         m_climber.setDesiredPose(-15.0);
         m_finished = false;
         m_pastHooks = false;
@@ -53,7 +53,7 @@ public class ClimbToHighBar extends CommandBase {
         SmartDashboard.putNumber("alpha", m_alpha);
 
         if(m_climber.getPose()<60.0 && !m_slowStartDone){
-            m_climber.changeConstraints(new Constraints(90, 30));
+            m_climber.changeConstraints(new Constraints(90, 25));
             m_slowStartDone = true;
         }
 

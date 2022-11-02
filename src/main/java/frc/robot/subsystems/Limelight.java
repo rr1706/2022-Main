@@ -42,8 +42,12 @@ public class Limelight {
      *
      * @return the yaw angle in radians.
      */
-    public static double tx() {
-        return Math.toRadians(VisionConstants.kAzimuthalAngle + table.getEntry("tx").getDouble(0.0));
+    public static double rawTx() {
+        return table.getEntry("tx").getDouble(0.0);
+    }
+
+    public static double tx(){
+        return Math.toRadians(VisionConstants.kAzimuthalAngle + rawTx());
     }
 
     /**
@@ -82,7 +86,7 @@ public class Limelight {
      * @return the distance to the target in inches
      */
     public static double getDistance() {
-        final double tx = tx()*180.0/Math.PI;
+        final double tx = rawTx();
         final double tyAdj = (ty() -0.0084125*tx*tx)/(0.000267*tx*tx+1.0); //New geometric correction function
         final double distance = distTable.getOutput(tyAdj);
         SmartDashboard.putNumber("Limelight ty", ty());

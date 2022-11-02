@@ -28,7 +28,7 @@ public class ClimbFromFloor extends CommandBase {
 
     @Override
     public void initialize() {
-        m_climber.changeConstraints(new Constraints(90, 30));
+        m_climber.changeConstraints(new Constraints(80, 25));
         m_climber.setDesiredPose(-15.0);
         m_finished = false;
         m_pastHooks = false;
