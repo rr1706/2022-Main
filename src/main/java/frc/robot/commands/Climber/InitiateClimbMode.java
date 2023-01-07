@@ -47,9 +47,10 @@ public class InitiateClimbMode extends CommandBase {
     m_highElevator.stop();
     m_climber.extend();
     m_climber.changeConstraints(new Constraints(100, 250));
-    m_climber.setDesiredPose(ClimberConstants.kExtendPose);
+    m_climber.setDesiredPose(ClimberConstants.kExtendPose+1.5);
     m_climber.run();
   }
+  
 
   @Override
   public void execute() {
